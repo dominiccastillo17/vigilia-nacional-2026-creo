@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ficha Oficial de Inscripción - Vigilia Nacional Procesos 2026</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<aside class="control-panel no-print" aria-label="Controles de la ficha">
+  <div class="panel-title">Ficha digital</div>
+  <button id="btnPreview" type="button">Vista previa</button>
+  <button id="btnEdit" type="button" class="secondary">Editar</button>
+  <button id="btnSave" type="button">Guardar registro</button>
+  <button id="btnPrint" type="button">Imprimir / Guardar PDF</button>
+  <button id="btnClear" type="button" class="danger">Nueva ficha / Limpiar</button>
+  <button id="btnRecords" type="button" class="secondary">📋 Ver registros</button>
+  <div id="recordStatus" class="record-status"></div>
+</aside>
+
+<main class="page-wrap">
+<form id="registrationForm" class="sheet" autocomplete="off">
+  <header class="sheet-header">
+    <div class="top-pill">VIGILIA NACIONAL PROCESOS 2026</div>
+    <h1>FICHA OFICIAL DE INSCRIPCIÓN FÍSICA</h1>
+    <h2>Ministerio Nacional de Jóvenes IDP — Nicaragua</h2>
+  </header>
+
+  <section class="form-section">
+    <div class="section-title"><span>📝</span> SECCIÓN 1: DATOS PERSONALES DEL ASISTENTE</div>
+    <div class="field-row full"><label>NOMBRES COMPLETOS:</label><input name="nombres" type="text"></div>
+    <div class="field-row full"><label>APELLIDOS COMPLETOS:</label><input name="apellidos" type="text"></div>
+    <div class="grid-2 age-phone">
+      <div class="field-row inline-field"><label>EDAD:</label><span class="bracket">[</span><input class="short" name="edad" type="number" min="1" max="120"><span class="bracket">]</span><span>años</span></div>
+      <div class="field-row inline-field grow-line"><label>TELÉFONO / WHATSAPP:</label><input name="telefono" type="tel"></div>
+    </div>
+    <div class="field-row full email-row"><label>CORREO<br>ELECTRÓNICO:</label><input name="correo" type="email"></div>
+
+    <div class="sub-label">TALLA DE CAMISA SOLICITADA <span>(MARCAR ÚNICAMENTE UNA CASILLA) :</span></div>
+    <div class="check-grid shirt-grid" data-single-group="talla">
+      <label><input type="checkbox" name="talla" value="14 Juvenil"> Talla 14 (Juvenil)</label>
+      <label><input type="checkbox" name="talla" value="S Adulto"> Talla S (Adulto)</label>
+      <label><input type="checkbox" name="talla" value="XL Adulto"> Talla XL (Adulto)</label>
+      <label><input type="checkbox" name="talla" value="16 Juvenil"> Talla 16 (Juvenil)</label>
+      <label><input type="checkbox" name="talla" value="M Adulto"> Talla M (Adulto)</label>
+      <label><input type="checkbox" name="talla" value="2XL Adulto"> Talla 2XL (Adulto)</label>
+      <label><input type="checkbox" name="talla" value="18 Juvenil"> Talla 18 (Juvenil)</label>
+      <label><input type="checkbox" name="talla" value="L Adulto"> Talla L (Adulto)</label>
+      <label><input type="checkbox" name="talla" value="3XL Adulto"> Talla 3XL (Adulto)</label>
+    </div>
+  </section>
+
+  <section class="form-section">
+    <div class="section-title"><span>⛪</span> SECCIÓN 2: INFORMACIÓN DE LA IGLESIA</div>
+    <div class="grid-2 region-district">
+      <div class="field-row inline-field"><label>REGIÓN:</label><span>[ Región No.</span><input class="short" name="region" type="text"><span>]</span></div>
+      <div class="field-row inline-field"><label>DISTRITO:</label><span>[ Distrito No.</span><input class="short" name="distrito" type="text"><span>]</span></div>
+    </div>
+    <div class="field-row full church-name"><label>NOMBRE DE LA IGLESIA<br>LOCAL:</label><input name="iglesia" type="text"></div>
+    <div class="field-row full"><label>NOMBRE DEL PASTOR LOCAL:</label><input name="pastor" type="text"></div>
+    <div class="sub-label role-title">CARGO / FUNCIÓN EN LA IGLESIA:</div>
+    <div class="check-grid role-grid" data-single-group="cargo">
+      <label><input type="checkbox" name="cargo" value="Líder"> Líder</label>
+      <label><input type="checkbox" name="cargo" value="Miembro"> Miembro</label>
+      <label><input type="checkbox" name="cargo" value="Amigo"> Amigo</label>
+    </div>
+  </section>
+
+  <section class="form-section medical-section">
+    <div class="section-title"><span>🩺</span> SECCIÓN 3: FICHA MÉDICA Y ALERGIAS (OBLIGATORIO)</div>
+    <div class="question">¿PADECE ALGUNA ALERGIA, ENFERMEDAD CRÓNICA O CONDICIÓN MÉDICA ESPECIAL?</div>
+    <div class="medical-options" data-single-group="condicionMedica">
+      <label><input type="checkbox" name="condicionMedica" value="NO"> NO</label>
+      <label><input type="checkbox" name="condicionMedica" value="SÍ"> SÍ (Especificar detalles a continuación):</label>
+    </div>
+    <textarea name="detalleMedico" rows="2" aria-label="Detalles médicos"></textarea>
+    <div class="example">*(Ejemplo: Alérgico a la penicilina, asma severa, alergia al maní, etc.)*</div>
+  </section>
+
+  <section class="form-section payment-section">
+    <div class="section-title"><span>💵</span> SECCIÓN 4: CONTROL DE PAGO EN EFECTIVO (USO EXCLUSIVO DEL LÍDER REGIONAL)</div>
+    <div class="payment-grid">
+      <div>
+        <div class="payment-label">MONTO RECIBIDO:</div>
+        <div class="money-line"><b>C$</b><input name="monto" type="number" step="0.01" min="0"><b>NIO</b></div>
+      </div>
+      <div>
+        <div class="payment-label">FIRMA DE RECIBIDO DEL LÍDER REGIONAL:</div>
+        <input class="signature-line" name="firmaLider" type="text" aria-label="Firma de recibido del líder regional">
+      </div>
+      <div>
+        <div class="payment-label">FECHA DE RECEPCIÓN:</div>
+        <div class="date-line"><span>[</span><input name="dia" type="number" min="1" max="31"><span>/</span><input name="mes" type="number" min="1" max="12"><span>/ 2026 ]</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="sheet-footer">Nota: Esta ficha debe ser entregada al Líder Regional junto con la cuota de inscripción en efectivo para su registro oficial en el sistema.</footer>
+</form>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
