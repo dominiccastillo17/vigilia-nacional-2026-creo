@@ -98,6 +98,230 @@
   <footer class="sheet-footer">Nota: Esta ficha debe ser entregada al Líder Regional junto con la cuota de inscripción en efectivo para su registro oficial en el sistema.</footer>
 </form>
 </main>
-<script src="app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC8nZjzJ8t5oApqks_tko8UiW2FO3limXU",
+  authDomain: "vigilia-nacional-2026.firebaseapp.com",
+  databaseURL: "https://vigilia-nacional-2026-default-rtdb.firebaseio.com",
+  projectId: "vigilia-nacional-2026",
+  storageBucket: "vigilia-nacional-2026.firebasestorage.app",
+  messagingSenderId: "92857146796",
+  appId: "1:92857146796:web:7979c8cf925ca0002c2e09"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const list = document.getElementById('recordList');
+const summary = document.getElementById('summary');
+
+async function getRecords() {
+  const snapshot = await db.ref('registros').once('value');
+
+  if (!snapshot.exists()) return [];
+
+  return Object.values(snapshot.val());
+}
+
+function esc(v) {
+  return String(v ?? '').replace(/[&<>'"]/g, c => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    "'":'&#39;',
+    '"':'&quot;'
+  }[c]));
+}
+
+async function render() {
+  try {
+    const records = await getRecords();
+
+    summary.textContent =
+      `${records.length} inscrito(s) registrado(s). Selecciona los que quieras incluir en el PDF.`;
+
+    if (!records.length) {
+      list.innerHTML =
+        '<div class="empty">Todavía no hay registros.</div>';
+      return;
+    }
+
+    list.innerHTML = `
+      <div class="record-card">
+        <label class="top-check">
+          <input id="selectAll" type="checkbox">
+          Seleccionar todos
+        </label>
+      </div>
+    ` +
+    records.map(r => `
+      <article class="record-card">
+        <div class="select-row">
+          <input class="record-check"
+                 type="checkbox"
+                 value="${esc(r.idRegistro)}">
+
+          <strong>
+            ${esc(r.nombres)} ${esc(r.apellidos)}
+          </strong>
+        </div>
+
+        <div class="record-meta">
+          ID: ${esc(r.idRegistro)} ·
+          Registrado: ${esc(r.fechaRegistro)}
+        </div>
+
+        <div class="record-meta">
+          Región ${esc(r.region)} ·
+          Distrito ${esc(r.distrito)} ·
+          Iglesia: ${esc(r.iglesia)}
+        </div>
+
+        <div class="record-meta">
+          Teléfono: ${esc(r.telefono)} ·
+          Talla: ${esc(r.talla)} ·
+          Cargo: ${esc(r.cargo)}
+        </div>
+
+        <div class="record-actions">
+          <button onclick="openRecord('${esc(r.idRegistro)}')">
+            Abrir ficha
+          </button>
+
+          <button class="secondary"
+                  onclick="printOne('${esc(r.idRegistro)}')">
+            PDF / Imprimir
+          </button>
+
+          <button class="danger"
+                  onclick="deleteOne('${esc(r.idRegistro)}')">
+            Eliminar
+          </button>
+        </div>
+      </article>
+    `).join('');
+
+    document.getElementById('selectAll').onchange = e => {
+      document.querySelectorAll('.record-check')
+        .forEach(c => c.checked = e.target.checked);
+    };
+
+  } catch (error) {
+    console.error(error);
+
+    list.innerHTML =
+      '<div class="empty">No se pudieron cargar los registros desde Firebase.</div>';
+  }
+}
+
+function openRecord(id) {
+  location.href =
+    'index.html?id=' + encodeURIComponent(id);
+}
+
+function printOne(id) {
+  localStorage.setItem(
+    'vigilia2026_pdf_ids',
+    JSON.stringify([id])
+  );
+
+  location.href = 'imprimir.html';
+}
+
+function selectedIds() {
+  return [...document.querySelectorAll('.record-check:checked')]
+    .map(x => x.value);
+}
+
+function printSelected() {
+  const ids = selectedIds();
+
+  if (!ids.length) {
+    alert('Selecciona al menos un registro.');
+    return;
+  }
+
+  localStorage.setItem(
+    'vigilia2026_pdf_ids',
+    JSON.stringify(ids)
+  );
+
+  location.href = 'imprimir.html';
+}
+
+async function printAll() {
+  const records = await getRecords();
+
+  const ids = records.map(r => r.idRegistro);
+
+  if (!ids.length) {
+    alert('No hay registros para crear el PDF.');
+    return;
+  }
+
+  localStorage.setItem(
+    'vigilia2026_pdf_ids',
+    JSON.stringify(ids)
+  );
+
+  location.href = 'imprimir.html';
+}
+
+async function deleteOne(id) {
+  if (!confirm(
+    '¿Eliminar este registro? Esta acción no se puede deshacer.'
+  )) return;
+
+  try {
+    await db.ref('registros/' + id).remove();
+
+    alert('Registro eliminado.');
+
+    render();
+
+  } catch (error) {
+    console.error(error);
+    alert('No se pudo eliminar el registro.');
+  }
+}
+
+document.getElementById('newBtn').onclick =
+  () => location.href = 'index.html';
+
+document.getElementById('allPdfBtn').onclick =
+  printAll;
+
+document.getElementById('selectedPdfBtn').onclick =
+  printSelected;
+
+document.getElementById('deleteAllBtn').onclick =
+  async () => {
+
+    const records = await getRecords();
+
+    if (!records.length) return;
+
+    if (!confirm(
+      '¿Borrar TODOS los registros? Esta acción no se puede deshacer.'
+    )) return;
+
+    try {
+      await db.ref('registros').remove();
+
+      alert('Todos los registros fueron eliminados.');
+
+      render();
+
+    } catch (error) {
+      console.error(error);
+      alert('No se pudieron eliminar los registros.');
+    }
+  };
+
+render();
+</script>
 </body>
 </html>
