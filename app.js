@@ -1,179 +1,194 @@
-// =====================================================
-// VIGILIA NACIONAL PROCESOS 2026
-// APP.JS
-// =====================================================
-
 document.addEventListener("DOMContentLoaded", () => {
 
-  console.log("app.js cargado correctamente");
+  console.log("✅ app.js cargado");
 
-  // ---------------------------------------------------
-  // ELEMENTOS
-  // ---------------------------------------------------
-
-  const form = document.getElementById("registroForm");
-
-  const btnGuardar = document.getElementById("btnGuardar");
-  const btnVistaPrevia = document.getElementById("btnVistaPrevia");
-  const btnEditar = document.getElementById("btnEditar");
-  const btnImprimir = document.getElementById("btnImprimir");
-  const btnLimpiar = document.getElementById("btnLimpiar");
-  const btnRegistros = document.getElementById("btnRegistros");
-
-  // ---------------------------------------------------
-  // COMPROBAR SUPABASE
-  // ---------------------------------------------------
+  // =====================================================
+  // SUPABASE
+  // =====================================================
 
   if (!window.supabaseClient) {
-    console.error("Supabase no está configurado.");
+    console.error("❌ Supabase no está configurado");
     alert("Error: Supabase no está configurado correctamente.");
     return;
   }
 
   const supabase = window.supabaseClient;
 
-  // ---------------------------------------------------
-  // ESTADO
-  // ---------------------------------------------------
+  // =====================================================
+  // ELEMENTOS DEL HTML
+  // =====================================================
+
+  const form = document.getElementById("registrationForm");
+
+  const btnPreview = document.getElementById("btnPreview");
+  const btnEdit = document.getElementById("btnEdit");
+  const btnSave = document.getElementById("btnSave");
+  const btnPrint = document.getElementById("btnPrint");
+  const btnClear = document.getElementById("btnClear");
+  const btnRecords = document.getElementById("btnRecords");
+
+  const recordStatus = document.getElementById("recordStatus");
 
   let currentRecordId = null;
 
-  // ---------------------------------------------------
+  // =====================================================
   // UTILIDADES
-  // ---------------------------------------------------
+  // =====================================================
+
+  function setStatus(text) {
+    if (recordStatus) {
+      recordStatus.textContent = text;
+    }
+
+    console.log(text);
+  }
 
   function makeId() {
+
     const now = new Date();
 
     return (
-      now.getFullYear().toString() +
-      (now.getMonth() + 1).toString().padStart(2, "0") +
-      now.getDate().toString().padStart(2, "0") +
+      now.getFullYear() +
+      String(now.getMonth() + 1).padStart(2, "0") +
+      String(now.getDate()).padStart(2, "0") +
       "-" +
-      now.getHours().toString().padStart(2, "0") +
-      now.getMinutes().toString().padStart(2, "0") +
-      now.getSeconds().toString().padStart(2, "0")
+      String(now.getHours()).padStart(2, "0") +
+      String(now.getMinutes()).padStart(2, "0") +
+      String(now.getSeconds()).padStart(2, "0") +
+      "-" +
+      Math.random().toString(36).substring(2, 7)
     );
   }
 
-  function getValue(id) {
-    const element = document.getElementById(id);
+  function getValue(name) {
+
+    const element = form.querySelector(`[name="${name}"]`);
+
     return element ? element.value.trim() : "";
   }
 
-  function setValue(id, value) {
-    const element = document.getElementById(id);
+  function getCheckedValue(name) {
 
-    if (element) {
-      element.value = value ?? "";
-    }
+    const element = form.querySelector(
+      `input[name="${name}"]:checked`
+    );
+
+    return element ? element.value : "";
   }
 
-  function getChecked(id) {
-    const element = document.getElementById(id);
-    return element ? element.checked : false;
-  }
+  // =====================================================
+  // CHECKBOXES DE SELECCIÓN ÚNICA
+  // =====================================================
 
-  function setStatus(message) {
-    const status = document.getElementById("status");
+  const singleGroups = [
+    "talla",
+    "cargo",
+    "condicionMedica"
+  ];
 
-    if (status) {
-      status.textContent = message;
-    } else {
-      console.log(message);
-    }
-  }
+  singleGroups.forEach((group) => {
 
-  // ---------------------------------------------------
-  // CHECKBOXES
-  // ---------------------------------------------------
+    const checkboxes = form.querySelectorAll(
+      `input[name="${group}"]`
+    );
 
-  const medicalCheckboxes = document.querySelectorAll(
-    'input[type="checkbox"][name="condicionMedica"]'
-  );
+    checkboxes.forEach((checkbox) => {
 
-  medicalCheckboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", () => {
+      checkbox.addEventListener("change", () => {
 
-      if (checkbox.checked) {
-        medicalCheckboxes.forEach((other) => {
-          if (other !== checkbox) {
-            other.checked = false;
-          }
-        });
-      }
+        if (checkbox.checked) {
+
+          checkboxes.forEach((other) => {
+
+            if (other !== checkbox) {
+              other.checked = false;
+            }
+
+          });
+
+        }
+
+      });
 
     });
+
   });
 
-  // ---------------------------------------------------
-  // RECOPILAR FORMULARIO
-  // ---------------------------------------------------
+  // =====================================================
+  // RECOPILAR DATOS
+  // =====================================================
 
   function collectForm() {
 
     const now = new Date();
 
-    let condicionMedica = "";
-
-    const checkedMedical = document.querySelector(
-      'input[type="checkbox"][name="condicionMedica"]:checked'
-    );
-
-    if (checkedMedical) {
-      condicionMedica = checkedMedical.value;
-    }
-
     return {
 
-      idRegistro: currentRecordId || makeId(),
+      idRegistro:
+        currentRecordId || makeId(),
 
       fechaRegistro:
-        `${now.getDate()}/` +
-        `${now.getMonth() + 1}/` +
-        `${now.getFullYear()}`,
+        `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`,
 
-      nombres: getValue("nombres"),
+      nombres:
+        getValue("nombres"),
 
-      apellidos: getValue("apellidos"),
+      apellidos:
+        getValue("apellidos"),
 
-      edad: getValue("edad"),
+      edad:
+        getValue("edad"),
 
-      telefono: getValue("telefono"),
+      telefono:
+        getValue("telefono"),
 
-      correo: getValue("correo"),
+      correo:
+        getValue("correo"),
 
-      talla: getValue("talla"),
+      talla:
+        getCheckedValue("talla"),
 
-      region: getValue("region"),
+      region:
+        getValue("region"),
 
-      distrito: getValue("distrito"),
+      distrito:
+        getValue("distrito"),
 
-      iglesia: getValue("iglesia"),
+      iglesia:
+        getValue("iglesia"),
 
-      pastor: getValue("pastor"),
+      pastor:
+        getValue("pastor"),
 
-      cargo: getValue("cargo"),
+      cargo:
+        getCheckedValue("cargo"),
 
-      condicionMedica: condicionMedica,
+      condicionMedica:
+        getCheckedValue("condicionMedica"),
 
-      detalleMedico: getValue("detalleMedico"),
+      detalleMedico:
+        getValue("detalleMedico"),
 
-      monto: getValue("monto"),
+      monto:
+        getValue("monto"),
 
-      firmaLider: getValue("firmaLider"),
+      firmaLider:
+        getValue("firmaLider"),
 
-      dia: getValue("dia"),
+      dia:
+        getValue("dia"),
 
-      mes: getValue("mes"),
+      mes:
+        getValue("mes"),
 
-      anio: getValue("anio")
+      anio:
+        "2026"
     };
   }
 
-  // ---------------------------------------------------
+  // =====================================================
   // GUARDAR
-  // ---------------------------------------------------
+  // =====================================================
 
   async function saveRecord() {
 
@@ -183,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = collectForm();
 
-      console.log("Datos que se enviarán:", data);
+      console.log("📤 Enviando a Supabase:", data);
 
       const { data: result, error } = await supabase
         .from("registros_vigilia")
@@ -198,43 +213,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (error) {
 
-        console.error("Error de Supabase:", error);
-
-        alert(
-          "No se pudo guardar el registro:\n\n" +
-          error.message
-        );
+        console.error("❌ Error Supabase:", error);
 
         setStatus("Error al guardar");
+
+        alert(
+          "❌ No se pudo guardar:\n\n" +
+          error.message
+        );
 
         return;
       }
 
       currentRecordId = result.idRegistro;
 
-      console.log("Registro guardado:", result);
+      console.log("✅ Registro guardado:", result);
 
-      setStatus("Registro guardado correctamente");
+      setStatus(
+        "Registro guardado: " +
+        currentRecordId
+      );
 
-      alert("✅ Registro guardado correctamente.");
+      alert(
+        "✅ ¡Registro guardado correctamente!"
+      );
 
     } catch (error) {
 
-      console.error("Error inesperado:", error);
-
-      alert(
-        "Error inesperado:\n\n" +
-        error.message
-      );
+      console.error("❌ Error:", error);
 
       setStatus("Error");
 
+      alert(
+        "❌ Error inesperado:\n\n" +
+        error.message
+      );
+
     }
+
   }
 
-  // ---------------------------------------------------
+  // =====================================================
   // VISTA PREVIA
-  // ---------------------------------------------------
+  // =====================================================
 
   function previewRecord() {
 
@@ -257,36 +278,87 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
 
       alert(
-        "No se pudo generar la vista previa."
+        "❌ No se pudo generar la vista previa."
       );
 
     }
+
   }
 
-  // ---------------------------------------------------
-  // EDITAR
-  // ---------------------------------------------------
+  // =====================================================
+  // IMPRIMIR
+  // =====================================================
 
-  function editRecord() {
+  function printRecord() {
 
-    const id = prompt(
-      "Escribe el ID del registro que deseas editar:"
+    if (!currentRecordId) {
+
+      alert(
+        "Primero guarda el registro antes de imprimirlo."
+      );
+
+      return;
+    }
+
+    window.open(
+      "imprimir.html?ids=" +
+      encodeURIComponent(currentRecordId),
+      "_blank"
     );
 
-    if (!id) return;
-
-    loadRecord(id);
   }
 
-  // ---------------------------------------------------
+  // =====================================================
+  // LIMPIAR
+  // =====================================================
+
+  function clearForm() {
+
+    if (!confirm(
+      "¿Deseas limpiar la ficha y comenzar un nuevo registro?"
+    )) {
+      return;
+    }
+
+    form.reset();
+
+    currentRecordId = null;
+
+    setStatus(
+      "Nueva ficha lista"
+    );
+
+  }
+
+  // =====================================================
+  // EDITAR
+  // =====================================================
+
+  async function editRecord() {
+
+    const id = prompt(
+      "Introduce el ID del registro que deseas editar:"
+    );
+
+    if (!id) {
+      return;
+    }
+
+    await loadRecord(id.trim());
+
+  }
+
+  // =====================================================
   // CARGAR REGISTRO
-  // ---------------------------------------------------
+  // =====================================================
 
   async function loadRecord(id) {
 
     try {
 
-      setStatus("Cargando registro...");
+      setStatus(
+        "Cargando registro..."
+      );
 
       const { data, error } = await supabase
         .from("registros_vigilia")
@@ -299,7 +371,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error(error);
 
         alert(
-          "No se encontró el registro:\n\n" +
+          "❌ No se encontró el registro:\n\n" +
           error.message
         );
 
@@ -308,38 +380,75 @@ document.addEventListener("DOMContentLoaded", () => {
 
       currentRecordId = data.idRegistro;
 
-      setValue("nombres", data.nombres);
-      setValue("apellidos", data.apellidos);
-      setValue("edad", data.edad);
-      setValue("telefono", data.telefono);
-      setValue("correo", data.correo);
-      setValue("talla", data.talla);
-      setValue("region", data.region);
-      setValue("distrito", data.distrito);
-      setValue("iglesia", data.iglesia);
-      setValue("pastor", data.pastor);
-      setValue("cargo", data.cargo);
-      setValue("detalleMedico", data.detalleMedico);
-      setValue("monto", data.monto);
-      setValue("firmaLider", data.firmaLider);
-      setValue("dia", data.dia);
-      setValue("mes", data.mes);
-      setValue("anio", data.anio);
+      form.querySelector('[name="nombres"]').value =
+        data.nombres || "";
 
-      document
-        .querySelectorAll(
-          'input[type="checkbox"][name="condicionMedica"]'
-        )
+      form.querySelector('[name="apellidos"]').value =
+        data.apellidos || "";
+
+      form.querySelector('[name="edad"]').value =
+        data.edad || "";
+
+      form.querySelector('[name="telefono"]').value =
+        data.telefono || "";
+
+      form.querySelector('[name="correo"]').value =
+        data.correo || "";
+
+      form.querySelector('[name="region"]').value =
+        data.region || "";
+
+      form.querySelector('[name="distrito"]').value =
+        data.distrito || "";
+
+      form.querySelector('[name="iglesia"]').value =
+        data.iglesia || "";
+
+      form.querySelector('[name="pastor"]').value =
+        data.pastor || "";
+
+      form.querySelector('[name="detalleMedico"]').value =
+        data.detalleMedico || "";
+
+      form.querySelector('[name="monto"]').value =
+        data.monto || "";
+
+      form.querySelector('[name="firmaLider"]').value =
+        data.firmaLider || "";
+
+      form.querySelector('[name="dia"]').value =
+        data.dia || "";
+
+      form.querySelector('[name="mes"]').value =
+        data.mes || "";
+
+      // TALLA
+      form
+        .querySelectorAll('input[name="talla"]')
         .forEach((checkbox) => {
+          checkbox.checked =
+            checkbox.value === data.talla;
+        });
 
+      // CARGO
+      form
+        .querySelectorAll('input[name="cargo"]')
+        .forEach((checkbox) => {
+          checkbox.checked =
+            checkbox.value === data.cargo;
+        });
+
+      // CONDICIÓN MÉDICA
+      form
+        .querySelectorAll('input[name="condicionMedica"]')
+        .forEach((checkbox) => {
           checkbox.checked =
             checkbox.value === data.condicionMedica;
-
         });
 
       setStatus(
         "Editando registro " +
-        data.idRegistro
+        currentRecordId
       );
 
     } catch (error) {
@@ -347,121 +456,66 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
 
       alert(
-        "Error cargando registro:\n\n" +
+        "❌ Error cargando registro:\n\n" +
         error.message
       );
 
     }
-  }
-
-  // ---------------------------------------------------
-  // IMPRIMIR
-  // ---------------------------------------------------
-
-  function printRecord() {
-
-    const id =
-      currentRecordId ||
-      getValue("idRegistro");
-
-    if (id) {
-
-      window.open(
-        "imprimir.html?ids=" +
-        encodeURIComponent(id),
-        "_blank"
-      );
-
-    } else {
-
-      alert(
-        "Primero guarda el registro."
-      );
-
-    }
-  }
-
-  // ---------------------------------------------------
-  // LIMPIAR
-  // ---------------------------------------------------
-
-  function clearForm() {
-
-    if (form) {
-      form.reset();
-    }
-
-    currentRecordId = null;
-
-    setStatus("Formulario limpio");
-
-    document
-      .querySelectorAll(
-        'input[type="checkbox"][name="condicionMedica"]'
-      )
-      .forEach((checkbox) => {
-        checkbox.checked = false;
-      });
 
   }
 
-  // ---------------------------------------------------
+  // =====================================================
   // EVENTOS
-  // ---------------------------------------------------
+  // =====================================================
 
-  if (form) {
+  if (btnSave) {
 
-    form.addEventListener(
-      "submit",
-      (event) => {
-
-        event.preventDefault();
-
-        saveRecord();
-
-      }
-    );
-
-  }
-
-  if (btnGuardar) {
-    btnGuardar.addEventListener(
+    btnSave.addEventListener(
       "click",
       saveRecord
     );
+
   }
 
-  if (btnVistaPrevia) {
-    btnVistaPrevia.addEventListener(
+  if (btnPreview) {
+
+    btnPreview.addEventListener(
       "click",
       previewRecord
     );
+
   }
 
-  if (btnEditar) {
-    btnEditar.addEventListener(
+  if (btnEdit) {
+
+    btnEdit.addEventListener(
       "click",
       editRecord
     );
+
   }
 
-  if (btnImprimir) {
-    btnImprimir.addEventListener(
+  if (btnPrint) {
+
+    btnPrint.addEventListener(
       "click",
       printRecord
     );
+
   }
 
-  if (btnLimpiar) {
-    btnLimpiar.addEventListener(
+  if (btnClear) {
+
+    btnClear.addEventListener(
       "click",
       clearForm
     );
+
   }
 
-  if (btnRegistros) {
+  if (btnRecords) {
 
-    btnRegistros.addEventListener(
+    btnRecords.addEventListener(
       "click",
       () => {
 
@@ -473,12 +527,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
-  // ---------------------------------------------------
+  // =====================================================
+  // FORMULARIO
+  // =====================================================
+
+  form.addEventListener(
+    "submit",
+    (event) => {
+
+      event.preventDefault();
+
+      saveRecord();
+
+    }
+  );
+
+  // =====================================================
   // INICIO
-  // ---------------------------------------------------
+  // =====================================================
+
+  setStatus(
+    "Sistema listo"
+  );
 
   console.log(
-    "✅ Sistema de Vigilia iniciado correctamente"
+    "🚀 Sistema Vigilia Procesos 2026 iniciado"
   );
 
 });
