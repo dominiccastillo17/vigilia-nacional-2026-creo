@@ -2,305 +2,71 @@
 <html lang="es">
 
 <head>
-
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1"
->
+<title>Ficha de Inscripción - Vigilia Nacional Procesos 2026</title>
 
-<title>
-Ficha Oficial - Vigilia Nacional Procesos 2026
-</title>
+<link rel="stylesheet" href="styles.css">
 
 <style>
-
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  background: #e5e7eb;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #111827;
-}
-
-.toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: #111827;
-  padding: 12px;
+.print-toolbar {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 9999;
   display: flex;
-  gap: 10px;
-  justify-content: center;
+  gap: 8px;
 }
 
-.toolbar button {
+.print-toolbar button {
   border: 0;
   border-radius: 8px;
-  padding: 10px 18px;
-  cursor: pointer;
-  font-weight: bold;
+  padding: 10px 15px;
+  background: #173d8e;
   color: white;
-  background: #2563eb;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.toolbar button.secondary {
+.print-toolbar button.secondary {
   background: #4b5563;
 }
 
-.sheet-container {
-  padding: 20px;
-}
-
-.sheet {
-  width: 210mm;
-  min-height: 297mm;
-  margin: auto;
+.print-error {
+  width: min(700px, 90%);
+  margin: 80px auto;
+  padding: 25px;
   background: white;
-  padding: 10mm;
-  box-shadow: 0 5px 25px rgba(0,0,0,.15);
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0,0,0,.12);
+  color: #9a2727;
+  font-family: Arial, sans-serif;
 }
 
-.sheet-header {
+.print-loading {
   text-align: center;
-  border-bottom: 2px solid #111827;
-  padding-bottom: 8px;
-}
-
-.top-pill {
-  display: inline-block;
-  padding: 5px 14px;
-  border-radius: 20px;
-  background: #111827;
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-h1 {
-  font-size: 20px;
-  margin: 8px 0 3px;
-}
-
-h2 {
-  font-size: 12px;
-  margin: 0;
-  font-weight: normal;
-}
-
-.form-section {
-  border: 1px solid #111827;
-  margin-top: 10px;
-}
-
-.section-title {
-  background: #111827;
-  color: white;
-  padding: 7px 9px;
-  font-size: 11px;
-  font-weight: bold;
-}
-
-.section-title span {
-  margin-right: 5px;
-}
-
-.field-row {
-  display: flex;
-  align-items: center;
-  min-height: 31px;
-  border-bottom: 1px solid #d1d5db;
-  padding: 4px 7px;
-}
-
-.field-row:last-child {
-  border-bottom: 0;
-}
-
-.field-row label {
-  font-size: 10px;
-  font-weight: bold;
-  min-width: 170px;
-}
-
-.field-value {
-  flex: 1;
-  min-height: 20px;
-  border-bottom: 1px solid #111827;
-  padding: 2px 5px;
-  font-size: 11px;
-}
-
-.grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.grid-2 > div {
-  border-right: 1px solid #d1d5db;
-}
-
-.grid-2 > div:last-child {
-  border-right: 0;
-}
-
-.inline {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.inline .field-label {
-  font-size: 10px;
-  font-weight: bold;
-}
-
-.sub-label {
-  font-size: 10px;
-  font-weight: bold;
-  padding: 7px;
-}
-
-.check-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 5px;
-  padding: 7px;
-  font-size: 10px;
-}
-
-.check-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.check {
-  width: 13px;
-  height: 13px;
-  border: 1px solid #111827;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: bold;
-}
-
-.medical-question {
-  padding: 8px;
-  font-size: 10px;
-  font-weight: bold;
-}
-
-.medical-options {
-  display: flex;
-  gap: 30px;
-  padding: 0 8px 7px;
-  font-size: 10px;
-}
-
-.detail-box {
-  margin: 5px 8px 8px;
-  min-height: 40px;
-  border: 1px solid #111827;
-  padding: 6px;
-  font-size: 10px;
-}
-
-.example {
-  font-size: 8px;
-  padding: 0 8px 8px;
-  font-style: italic;
-}
-
-.payment-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr 1fr;
-}
-
-.payment-cell {
-  min-height: 70px;
-  border-right: 1px solid #d1d5db;
-  padding: 7px;
-}
-
-.payment-cell:last-child {
-  border-right: 0;
-}
-
-.payment-label {
-  font-size: 9px;
-  font-weight: bold;
-  margin-bottom: 12px;
-}
-
-.payment-value {
-  border-bottom: 1px solid #111827;
-  min-height: 20px;
-  font-size: 11px;
-}
-
-.signature {
-  margin-top: 25px;
-}
-
-.footer {
-  margin-top: 10px;
-  border: 1px solid #111827;
-  padding: 7px;
-  font-size: 8px;
-  text-align: center;
-}
-
-.record-id {
-  text-align: right;
-  margin-top: 5px;
-  font-size: 7px;
-  color: #6b7280;
+  margin-top: 100px;
+  font-family: Arial, sans-serif;
 }
 
 @media print {
-
-  @page {
-    size: A4 portrait;
-    margin: 0;
-  }
-
-  html,
-  body {
-    background: white;
-  }
-
-  .toolbar {
+  .print-toolbar {
     display: none !important;
   }
 
-  .sheet-container {
-    padding: 0;
+  .print-error,
+  .print-loading {
+    display: none !important;
   }
-
-  .sheet {
-    width: 210mm;
-    min-height: 297mm;
-    margin: 0;
-    box-shadow: none;
-  }
-
 }
-
 </style>
 
 </head>
 
 <body>
 
-<div class="toolbar">
+<div class="print-toolbar no-print">
 
   <button onclick="window.print()">
     🖨️ Imprimir / Guardar PDF
@@ -310,20 +76,537 @@ h2 {
     class="secondary"
     onclick="window.close()"
   >
-    Cerrar
+    ✕ Cerrar
   </button>
 
 </div>
 
-<div
-  id="content"
-  class="sheet-container"
->
+
+<div id="loading" class="print-loading">
   Cargando ficha...
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<div id="error" class="print-error" style="display:none"></div>
+
+
+<main
+  id="content"
+  style="display:none"
+>
+
+<form
+  id="printForm"
+  class="sheet preview-mode"
+>
+
+<header class="sheet-header">
+
+  <div class="top-pill">
+    VIGILIA NACIONAL PROCESOS 2026
+  </div>
+
+  <h1>
+    FICHA OFICIAL DE INSCRIPCIÓN FÍSICA
+  </h1>
+
+  <h2>
+    Ministerio Nacional de Jóvenes IDP — Nicaragua
+  </h2>
+
+</header>
+
+
+<section class="form-section">
+
+  <div class="section-title">
+    <span>📝</span>
+    SECCIÓN 1: DATOS PERSONALES DEL ASISTENTE
+  </div>
+
+
+  <div class="field-row full">
+    <label>NOMBRES COMPLETOS:</label>
+    <input
+      id="nombres"
+      type="text"
+      readonly
+    >
+  </div>
+
+
+  <div class="field-row full">
+    <label>APELLIDOS COMPLETOS:</label>
+    <input
+      id="apellidos"
+      type="text"
+      readonly
+    >
+  </div>
+
+
+  <div class="grid-2 age-phone">
+
+    <div class="field-row inline-field">
+
+      <label>EDAD:</label>
+
+      <span class="bracket">[</span>
+
+      <input
+        id="edad"
+        class="short"
+        type="text"
+        readonly
+      >
+
+      <span class="bracket">]</span>
+
+      <span>años</span>
+
+    </div>
+
+
+    <div class="field-row inline-field grow-line">
+
+      <label>TELÉFONO / WHATSAPP:</label>
+
+      <input
+        id="telefono"
+        type="text"
+        readonly
+      >
+
+    </div>
+
+  </div>
+
+
+  <div class="field-row full email-row">
+
+    <label>
+      CORREO<br>
+      ELECTRÓNICO:
+    </label>
+
+    <input
+      id="correo"
+      type="text"
+      readonly
+    >
+
+  </div>
+
+
+  <div class="sub-label">
+
+    TALLA DE CAMISA SOLICITADA
+    <span>
+      (MARCAR ÚNICAMENTE UNA CASILLA) :
+    </span>
+
+  </div>
+
+
+  <div
+    class="check-grid shirt-grid"
+    data-single-group="talla"
+  >
+
+    <label>
+      <input
+        id="talla14"
+        type="checkbox"
+        disabled
+      >
+      Talla 14 (Juvenil)
+    </label>
+
+    <label>
+      <input
+        id="tallaS"
+        type="checkbox"
+        disabled
+      >
+      Talla S (Adulto)
+    </label>
+
+    <label>
+      <input
+        id="tallaXL"
+        type="checkbox"
+        disabled
+      >
+      Talla XL (Adulto)
+    </label>
+
+    <label>
+      <input
+        id="talla16"
+        type="checkbox"
+        disabled
+      >
+      Talla 16 (Juvenil)
+    </label>
+
+    <label>
+      <input
+        id="tallaM"
+        type="checkbox"
+        disabled
+      >
+      Talla M (Adulto)
+    </label>
+
+    <label>
+      <input
+        id="talla2XL"
+        type="checkbox"
+        disabled
+      >
+      Talla 2XL (Adulto)
+    </label>
+
+    <label>
+      <input
+        id="talla18"
+        type="checkbox"
+        disabled
+      >
+      Talla 18 (Juvenil)
+    </label>
+
+    <label>
+      <input
+        id="tallaL"
+        type="checkbox"
+        disabled
+      >
+      Talla L (Adulto)
+    </label>
+
+    <label>
+      <input
+        id="talla3XL"
+        type="checkbox"
+        disabled
+      >
+      Talla 3XL (Adulto)
+    </label>
+
+  </div>
+
+</section>
+
+
+<section class="form-section">
+
+  <div class="section-title">
+
+    <span>⛪</span>
+    SECCIÓN 2: INFORMACIÓN DE LA IGLESIA
+
+  </div>
+
+
+  <div class="grid-2 region-district">
+
+    <div class="field-row inline-field">
+
+      <label>REGIÓN:</label>
+
+      <span>[ Región No.</span>
+
+      <input
+        id="region"
+        class="short"
+        type="text"
+        readonly
+      >
+
+      <span>]</span>
+
+    </div>
+
+
+    <div class="field-row inline-field">
+
+      <label>DISTRITO:</label>
+
+      <span>[ Distrito No.</span>
+
+      <input
+        id="distrito"
+        class="short"
+        type="text"
+        readonly
+      >
+
+      <span>]</span>
+
+    </div>
+
+  </div>
+
+
+  <div class="field-row full church-name">
+
+    <label>
+      NOMBRE DE LA IGLESIA<br>
+      LOCAL:
+    </label>
+
+    <input
+      id="iglesia"
+      type="text"
+      readonly
+    >
+
+  </div>
+
+
+  <div class="field-row full">
+
+    <label>
+      NOMBRE DEL PASTOR LOCAL:
+    </label>
+
+    <input
+      id="pastor"
+      type="text"
+      readonly
+    >
+
+  </div>
+
+
+  <div class="sub-label role-title">
+    CARGO / FUNCIÓN EN LA IGLESIA:
+  </div>
+
+
+  <div
+    class="check-grid role-grid"
+    data-single-group="cargo"
+  >
+
+    <label>
+
+      <input
+        id="cargoLider"
+        type="checkbox"
+        disabled
+      >
+
+      Líder
+
+    </label>
+
+
+    <label>
+
+      <input
+        id="cargoMiembro"
+        type="checkbox"
+        disabled
+      >
+
+      Miembro
+
+    </label>
+
+
+    <label>
+
+      <input
+        id="cargoAmigo"
+        type="checkbox"
+        disabled
+      >
+
+      Amigo
+
+    </label>
+
+  </div>
+
+</section>
+
+
+<section class="form-section medical-section">
+
+  <div class="section-title">
+
+    <span>🩺</span>
+    SECCIÓN 3: FICHA MÉDICA Y ALERGIAS (OBLIGATORIO)
+
+  </div>
+
+
+  <div class="question">
+
+    ¿PADECE ALGUNA ALERGIA, ENFERMEDAD CRÓNICA O CONDICIÓN MÉDICA ESPECIAL?
+
+  </div>
+
+
+  <div
+    class="medical-options"
+    data-single-group="condicionMedica"
+  >
+
+    <label>
+
+      <input
+        id="condicionNO"
+        type="checkbox"
+        disabled
+      >
+
+      NO
+
+    </label>
+
+
+    <label>
+
+      <input
+        id="condicionSI"
+        type="checkbox"
+        disabled
+      >
+
+      SÍ (Especificar detalles a continuación):
+
+    </label>
+
+  </div>
+
+
+  <textarea
+    id="detalleMedico"
+    rows="2"
+    readonly
+  ></textarea>
+
+
+  <div class="example">
+
+    *(Ejemplo: Alérgico a la penicilina, asma severa,
+    alergia al maní, etc.)*
+
+  </div>
+
+</section>
+
+
+<section class="form-section payment-section">
+
+  <div class="section-title">
+
+    <span>💵</span>
+
+    SECCIÓN 4: CONTROL DE PAGO EN EFECTIVO
+    (USO EXCLUSIVO DEL LÍDER REGIONAL)
+
+  </div>
+
+
+  <div class="payment-grid">
+
+
+    <div>
+
+      <div class="payment-label">
+        MONTO RECIBIDO:
+      </div>
+
+      <div class="money-line">
+
+        <b>C$</b>
+
+        <input
+          id="monto"
+          type="text"
+          readonly
+        >
+
+        <b>NIO</b>
+
+      </div>
+
+    </div>
+
+
+    <div>
+
+      <div class="payment-label">
+
+        FIRMA DE RECIBIDO DEL LÍDER REGIONAL:
+
+      </div>
+
+      <input
+        id="firmaLider"
+        class="signature-line"
+        type="text"
+        readonly
+      >
+
+    </div>
+
+
+    <div>
+
+      <div class="payment-label">
+
+        FECHA DE RECEPCIÓN:
+
+      </div>
+
+      <div class="date-line">
+
+        <span>[</span>
+
+        <input
+          id="dia"
+          type="text"
+          readonly
+        >
+
+        <span>/</span>
+
+        <input
+          id="mes"
+          type="text"
+          readonly
+        >
+
+        <span>/ 2026 ]</span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer class="sheet-footer">
+
+  Nota: Esta ficha debe ser entregada al Líder Regional junto con
+  la cuota de inscripción en efectivo para su registro oficial
+  en el sistema.
+
+</footer>
+
+</form>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 
 <script>
@@ -331,551 +614,644 @@ h2 {
 const supabase =
   window.supabaseClient;
 
-function escapeHTML(value) {
 
-  if (value === null ||
-      value === undefined) {
-    return "";
-  }
+/* =========================================================
+   UTILIDADES
+========================================================= */
 
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+function showError(message) {
 
-}
+  document.getElementById("loading").style.display = "none";
 
-function check(value) {
+  const error =
+    document.getElementById("error");
 
-  return value
-    ? "✓"
-    : "";
+  error.style.display = "block";
+
+  error.innerHTML =
+    "<strong>❌ No se pudo cargar la ficha</strong><br><br>" +
+    message;
 
 }
 
-function ficha(r) {
 
-  const talla =
-    r.talla || "";
+function setValue(id, value) {
 
-  const cargo =
-    r.cargo || "";
+  const element =
+    document.getElementById(id);
 
-  const condicion =
-    r.condicionMedica || "";
+  if (!element) return;
 
-  return `
-
-  <div class="sheet">
-
-    <header class="sheet-header">
-
-      <div class="top-pill">
-        VIGILIA NACIONAL PROCESOS 2026
-      </div>
-
-      <h1>
-        FICHA OFICIAL DE INSCRIPCIÓN FÍSICA
-      </h1>
-
-      <h2>
-        Ministerio Nacional de Jóvenes IDP — Nicaragua
-      </h2>
-
-    </header>
-
-
-    <!-- DATOS PERSONALES -->
-
-    <section class="form-section">
-
-      <div class="section-title">
-        📝 SECCIÓN 1: DATOS PERSONALES DEL ASISTENTE
-      </div>
-
-      <div class="field-row">
-        <label>NOMBRES COMPLETOS:</label>
-        <div class="field-value">
-          ${escapeHTML(r.nombres)}
-        </div>
-      </div>
-
-      <div class="field-row">
-        <label>APELLIDOS COMPLETOS:</label>
-        <div class="field-value">
-          ${escapeHTML(r.apellidos)}
-        </div>
-      </div>
-
-      <div class="grid-2">
-
-        <div class="field-row">
-          <span class="field-label">
-            EDAD:
-          </span>
-
-          <div class="field-value">
-            ${escapeHTML(r.edad)} años
-          </div>
-        </div>
-
-        <div class="field-row">
-          <span class="field-label">
-            TELÉFONO / WHATSAPP:
-          </span>
-
-          <div class="field-value">
-            ${escapeHTML(r.telefono)}
-          </div>
-        </div>
-
-      </div>
-
-      <div class="field-row">
-
-        <label>
-          CORREO ELECTRÓNICO:
-        </label>
-
-        <div class="field-value">
-          ${escapeHTML(r.correo)}
-        </div>
-
-      </div>
-
-
-      <div class="sub-label">
-        TALLA DE CAMISA SOLICITADA:
-      </div>
-
-      <div class="check-grid">
-
-        <div class="check-item">
-          <span class="check">
-            ${check(talla === "14 Juvenil")}
-          </span>
-          Talla 14 (Juvenil)
-        </div>
-
-        <div class="check-item">
-          <span class="check">
-            ${check(talla === "S Adulto")}
-          </span>
-          Talla S (Adulto)
-        </div>
-
-        <div class="check-item">
-          <span class="check">
-            ${check(talla === "XL Adulto")}
-          </span>
-          Talla XL (Adulto)
-        </div>
-
-        <div class="check-item">
-          <span class="check">
-            ${check(talla === "16 Juvenil")}
-          </span>
-          Talla 16 (Juvenil)
-        </div>
-
-        <div class="check-item">
-          <span class="check">
-            ${check(talla === "M Adulto")}
-          </span>
-          Talla M (Adulto)
-        </div>
-
-        <div class="check-item">
-          <span class="check">
-            ${check(talla === "2XL Adulto")}
-          </span>
-          Talla 2XL (Adulto)
-        </div>
-
-        <div class="check-item">
-          <span class="check">
-            ${check(talla === "18 Juvenil")}
-          </span>
-          Talla 18 (Juvenil)
-        </div>
-
-        <div class="check-item">
-          <span class="check">
-            ${check(talla === "L Adulto")}
-          </span>
-          Talla L (Adulto)
-        </div>
-
-        <div class="check-item">
-          <span class="check">
-            ${check(talla === "3XL Adulto")}
-          </span>
-          Talla 3XL (Adulto)
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- IGLESIA -->
-
-    <section class="form-section">
-
-      <div class="section-title">
-        ⛪ SECCIÓN 2: INFORMACIÓN DE LA IGLESIA
-      </div>
-
-      <div class="grid-2">
-
-        <div class="field-row">
-
-          <span class="field-label">
-            REGIÓN:
-          </span>
-
-          <div class="field-value">
-            Región No. ${escapeHTML(r.region)}
-          </div>
-
-        </div>
-
-        <div class="field-row">
-
-          <span class="field-label">
-            DISTRITO:
-          </span>
-
-          <div class="field-value">
-            Distrito No. ${escapeHTML(r.distrito)}
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="field-row">
-
-        <label>
-          NOMBRE DE LA IGLESIA LOCAL:
-        </label>
-
-        <div class="field-value">
-          ${escapeHTML(r.iglesia)}
-        </div>
-
-      </div>
-
-
-      <div class="field-row">
-
-        <label>
-          NOMBRE DEL PASTOR LOCAL:
-        </label>
-
-        <div class="field-value">
-          ${escapeHTML(r.pastor)}
-        </div>
-
-      </div>
-
-
-      <div class="sub-label">
-        CARGO / FUNCIÓN EN LA IGLESIA:
-      </div>
-
-      <div class="check-grid">
-
-        <div class="check-item">
-
-          <span class="check">
-            ${check(cargo === "Líder")}
-          </span>
-
-          Líder
-
-        </div>
-
-        <div class="check-item">
-
-          <span class="check">
-            ${check(cargo === "Miembro")}
-          </span>
-
-          Miembro
-
-        </div>
-
-        <div class="check-item">
-
-          <span class="check">
-            ${check(cargo === "Amigo")}
-          </span>
-
-          Amigo
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- MEDICA -->
-
-    <section class="form-section">
-
-      <div class="section-title">
-        🩺 SECCIÓN 3: FICHA MÉDICA Y ALERGIAS (OBLIGATORIO)
-      </div>
-
-      <div class="medical-question">
-
-        ¿PADECE ALGUNA ALERGIA, ENFERMEDAD CRÓNICA
-        O CONDICIÓN MÉDICA ESPECIAL?
-
-      </div>
-
-      <div class="medical-options">
-
-        <div>
-
-          <span class="check">
-            ${check(condicion === "NO")}
-          </span>
-
-          NO
-
-        </div>
-
-        <div>
-
-          <span class="check">
-            ${check(condicion === "SÍ")}
-          </span>
-
-          SÍ
-
-        </div>
-
-      </div>
-
-      <div class="detail-box">
-
-        ${escapeHTML(r.detalleMedico)}
-
-      </div>
-
-      <div class="example">
-
-        *(Ejemplo: Alérgico a la penicilina,
-        asma severa, alergia al maní, etc.)*
-
-      </div>
-
-    </section>
-
-
-    <!-- PAGO -->
-
-    <section class="form-section">
-
-      <div class="section-title">
-
-        💵 SECCIÓN 4: CONTROL DE PAGO EN EFECTIVO
-        (USO EXCLUSIVO DEL LÍDER REGIONAL)
-
-      </div>
-
-      <div class="payment-grid">
-
-        <div class="payment-cell">
-
-          <div class="payment-label">
-            MONTO RECIBIDO:
-          </div>
-
-          <div class="payment-value">
-            C$ ${escapeHTML(r.monto)} NIO
-          </div>
-
-        </div>
-
-
-        <div class="payment-cell">
-
-          <div class="payment-label">
-            FIRMA DE RECIBIDO DEL LÍDER REGIONAL:
-          </div>
-
-          <div class="payment-value signature">
-            ${escapeHTML(r.firmaLider)}
-          </div>
-
-        </div>
-
-
-        <div class="payment-cell">
-
-          <div class="payment-label">
-            FECHA DE RECEPCIÓN:
-          </div>
-
-          <div class="payment-value">
-
-            ${escapeHTML(r.dia)}
-            /
-            ${escapeHTML(r.mes)}
-            /
-            2026
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <div class="footer">
-
-      Nota: Esta ficha debe ser entregada al Líder Regional
-      junto con la cuota de inscripción en efectivo
-      para su registro oficial en el sistema.
-
-    </div>
-
-    <div class="record-id">
-
-      ID: ${escapeHTML(r.idRegistro)}
-      &nbsp; | &nbsp;
-      Registro: ${escapeHTML(r.fechaRegistro)}
-
-    </div>
-
-  </div>
-
-  `;
+  element.value =
+    value === null ||
+    value === undefined
+      ? ""
+      : String(value);
 
 }
 
 
-async function cargar() {
+function check(id, value) {
 
-  const params =
-    new URLSearchParams(
-      window.location.search
+  const element =
+    document.getElementById(id);
+
+  if (!element) return;
+
+  element.checked = !!value;
+
+}
+
+
+/* =========================================================
+   TALLAS
+========================================================= */
+
+function setTalla(talla) {
+
+  talla =
+    String(talla || "")
+      .trim()
+      .toUpperCase();
+
+
+  check(
+    "talla14",
+    talla === "14 JUVENIL"
+  );
+
+  check(
+    "talla16",
+    talla === "16 JUVENIL"
+  );
+
+  check(
+    "talla18",
+    talla === "18 JUVENIL"
+  );
+
+  check(
+    "tallaS",
+    talla === "S ADULTO"
+  );
+
+  check(
+    "tallaM",
+    talla === "M ADULTO"
+  );
+
+  check(
+    "tallaL",
+    talla === "L ADULTO"
+  );
+
+  check(
+    "tallaXL",
+    talla === "XL ADULTO"
+  );
+
+  check(
+    "talla2XL",
+    talla === "2XL ADULTO"
+  );
+
+  check(
+    "talla3XL",
+    talla === "3XL ADULTO"
+  );
+
+}
+
+
+/* =========================================================
+   CARGO
+========================================================= */
+
+function setCargo(cargo) {
+
+  cargo =
+    String(cargo || "")
+      .trim()
+      .toUpperCase();
+
+
+  check(
+    "cargoLider",
+    cargo === "LÍDER" ||
+    cargo === "LIDER"
+  );
+
+
+  check(
+    "cargoMiembro",
+    cargo === "MIEMBRO"
+  );
+
+
+  check(
+    "cargoAmigo",
+    cargo === "AMIGO"
+  );
+
+}
+
+
+/* =========================================================
+   CONDICIÓN MÉDICA
+========================================================= */
+
+function setCondicion(value) {
+
+  value =
+    String(value || "")
+      .trim()
+      .toUpperCase();
+
+
+  check(
+    "condicionNO",
+    value === "NO"
+  );
+
+
+  check(
+    "condicionSI",
+    value === "SÍ" ||
+    value === "SI"
+  );
+
+}
+
+
+/* =========================================================
+   MOSTRAR REGISTRO
+========================================================= */
+
+function displayRecord(record) {
+
+  setValue("nombres", record.nombres);
+  setValue("apellidos", record.apellidos);
+  setValue("edad", record.edad);
+  setValue("telefono", record.telefono);
+  setValue("correo", record.correo);
+
+  setTalla(record.talla);
+
+  setValue("region", record.region);
+  setValue("distrito", record.distrito);
+  setValue("iglesia", record.iglesia);
+  setValue("pastor", record.pastor);
+
+  setCargo(record.cargo);
+
+  setCondicion(record.condicionMedica);
+
+  setValue(
+    "detalleMedico",
+    record.detalleMedico
+  );
+
+  setValue(
+    "monto",
+    record.monto
+  );
+
+  setValue(
+    "firmaLider",
+    record.firmaLider
+  );
+
+  setValue(
+    "dia",
+    record.dia
+  );
+
+  setValue(
+    "mes",
+    record.mes
+  );
+
+
+  document.getElementById("loading")
+    .style.display = "none";
+
+
+  document.getElementById("content")
+    .style.display = "block";
+
+}
+
+
+/* =========================================================
+   PREVIEW DESDE INDEX
+========================================================= */
+
+function loadPreview() {
+
+  const stored =
+    localStorage.getItem(
+      "vigiliaPreview"
     );
 
-  const preview =
-    params.get("preview");
 
-  const ids =
-    params.get("ids");
+  if (!stored) {
 
-  const content =
-    document.getElementById("content");
-
-
-  // ===================================================
-  // VISTA PREVIA
-  // ===================================================
-
-  if (preview === "1") {
-
-    const saved =
-      localStorage.getItem(
-        "vigiliaPreview"
-      );
-
-    if (!saved) {
-
-      content.innerHTML =
-        "<p>No hay datos para mostrar.</p>";
-
-      return;
-
-    }
-
-    const record =
-      JSON.parse(saved);
-
-    content.innerHTML =
-      ficha(record);
-
-    return;
-  }
-
-
-  // ===================================================
-  // REGISTRO/S
-  // ===================================================
-
-  if (!ids) {
-
-    content.innerHTML =
-      "<p>No se especificó ningún registro.</p>";
+    showError(
+      "No existe una vista previa guardada. " +
+      "Regresa a la ficha y presiona nuevamente «Vista previa»."
+    );
 
     return;
 
   }
 
-  const requestedIds =
-    ids
-      .split(",")
-      .map(id => id.trim())
-      .filter(Boolean);
+
+  let record;
+
+  try {
+
+    record =
+      JSON.parse(stored);
+
+  } catch (error) {
+
+    showError(
+      "Los datos de la vista previa están dañados."
+    );
+
+    return;
+
+  }
 
 
-  const { data, error } =
+  displayRecord(record);
+
+}
+
+
+/* =========================================================
+   CARGAR DESDE SUPABASE
+========================================================= */
+
+async function loadRecords(ids) {
+
+  if (!supabase) {
+
+    showError(
+      "Supabase no está configurado correctamente."
+    );
+
+    return;
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
     await supabase
       .from("registros_vigilia")
       .select("*")
-      .in(
-        "idRegistro",
-        requestedIds
-      );
+      .in("idRegistro", ids);
 
 
   if (error) {
 
     console.error(error);
 
-    content.innerHTML =
-      `<p>Error cargando registros:<br>
-      ${escapeHTML(error.message)}</p>`;
+    showError(
+      error.message
+    );
 
     return;
 
   }
 
 
-  const map =
-    new Map(
-      data.map(
-        record => [
-          record.idRegistro,
-          record
-        ]
-      )
+  if (!data || !data.length) {
+
+    showError(
+      "No se encontró ningún registro con el ID solicitado."
     );
 
+    return;
 
-  content.innerHTML =
-    requestedIds
-      .map(id => map.get(id))
-      .filter(Boolean)
-      .map(ficha)
-      .join("");
+  }
+
+
+  /*
+    Si se solicitó un solo registro,
+    mostramos solamente esa ficha.
+  */
+
+  if (data.length === 1) {
+
+    displayRecord(data[0]);
+
+    return;
+
+  }
+
+
+  /*
+    Para varios registros:
+    creamos una ficha por registro.
+  */
+
+  document.getElementById("loading")
+    .style.display = "none";
+
+
+  const content =
+    document.getElementById("content");
+
+  content.innerHTML = "";
+
+
+  data.forEach(record => {
+
+    const wrapper =
+      document.createElement("div");
+
+    wrapper.innerHTML = `
+      <form class="sheet preview-mode">
+        ${document.getElementById("printForm").innerHTML}
+      </form>
+    `;
+
+    content.appendChild(wrapper);
+
+  });
+
+
+  /*
+    Para impresión múltiple se vuelve a cargar
+    cada ficha con sus datos.
+  */
+
+  const sheets =
+    content.querySelectorAll(".sheet");
+
+
+  sheets.forEach(
+    (sheet, index) => {
+
+      fillSheet(
+        sheet,
+        data[index]
+      );
+
+    }
+  );
+
+
+  document.getElementById("printForm")
+    ?.remove();
+
+
+  content.style.display = "block";
 
 }
 
 
-cargar();
+/* =========================================================
+   RELLENAR UNA FICHA
+========================================================= */
+
+function fillSheet(sheet, record) {
+
+  function val(selector, value) {
+
+    const element =
+      sheet.querySelector(selector);
+
+    if (element) {
+
+      element.value =
+        value === null ||
+        value === undefined
+          ? ""
+          : String(value);
+
+    }
+
+  }
+
+
+  function chk(selector, value) {
+
+    const element =
+      sheet.querySelector(selector);
+
+    if (element) {
+
+      element.checked = !!value;
+
+    }
+
+  }
+
+
+  val("#nombres", record.nombres);
+  val("#apellidos", record.apellidos);
+  val("#edad", record.edad);
+  val("#telefono", record.telefono);
+  val("#correo", record.correo);
+
+  const talla =
+    String(record.talla || "")
+      .trim()
+      .toUpperCase();
+
+
+  chk(
+    "#talla14",
+    talla === "14 JUVENIL"
+  );
+
+  chk(
+    "#talla16",
+    talla === "16 JUVENIL"
+  );
+
+  chk(
+    "#talla18",
+    talla === "18 JUVENIL"
+  );
+
+  chk(
+    "#tallaS",
+    talla === "S ADULTO"
+  );
+
+  chk(
+    "#tallaM",
+    talla === "M ADULTO"
+  );
+
+  chk(
+    "#tallaL",
+    talla === "L ADULTO"
+  );
+
+  chk(
+    "#tallaXL",
+    talla === "XL ADULTO"
+  );
+
+  chk(
+    "#talla2XL",
+    talla === "2XL ADULTO"
+  );
+
+  chk(
+    "#talla3XL",
+    talla === "3XL ADULTO"
+  );
+
+
+  val("#region", record.region);
+  val("#distrito", record.distrito);
+  val("#iglesia", record.iglesia);
+  val("#pastor", record.pastor);
+
+
+  const cargo =
+    String(record.cargo || "")
+      .trim()
+      .toUpperCase();
+
+
+  chk(
+    "#cargoLider",
+    cargo === "LÍDER" ||
+    cargo === "LIDER"
+  );
+
+  chk(
+    "#cargoMiembro",
+    cargo === "MIEMBRO"
+  );
+
+  chk(
+    "#cargoAmigo",
+    cargo === "AMIGO"
+  );
+
+
+  const condicion =
+    String(record.condicionMedica || "")
+      .trim()
+      .toUpperCase();
+
+
+  chk(
+    "#condicionNO",
+    condicion === "NO"
+  );
+
+  chk(
+    "#condicionSI",
+    condicion === "SÍ" ||
+    condicion === "SI"
+  );
+
+
+  val(
+    "#detalleMedico",
+    record.detalleMedico
+  );
+
+  val(
+    "#monto",
+    record.monto
+  );
+
+  val(
+    "#firmaLider",
+    record.firmaLider
+  );
+
+  val(
+    "#dia",
+    record.dia
+  );
+
+  val(
+    "#mes",
+    record.mes
+  );
+
+}
+
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+async function init() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const preview =
+    params.get("preview");
+
+
+  const idsParam =
+    params.get("ids");
+
+
+  if (preview === "1") {
+
+    loadPreview();
+
+    return;
+
+  }
+
+
+  if (!idsParam) {
+
+    showError(
+      "No se recibió ningún registro para mostrar."
+    );
+
+    return;
+
+  }
+
+
+  const ids =
+    idsParam
+      .split(",")
+      .map(id =>
+        decodeURIComponent(id)
+      )
+      .filter(Boolean);
+
+
+  if (!ids.length) {
+
+    showError(
+      "El identificador del registro está vacío."
+    );
+
+    return;
+
+  }
+
+
+  await loadRecords(ids);
+
+}
+
+
+init();
 
 </script>
 
