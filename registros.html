@@ -1,640 +1,987 @@
 <!doctype html>
-
 <html lang="es">
 
 <head>
 
-<meta charset="utf-8">
+  <meta charset="utf-8">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1"
->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
 
-<title>
-Registros - Vigilia Nacional Procesos 2026
-</title>
+  <title>Registros - Vigilia Nacional Procesos 2026</title>
 
-<style>
+  <style>
 
-* {
-  box-sizing: border-box;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f3f4f6;
-  color: #111827;
-}
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #eef1f5;
+      color: #2f3d52;
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-header {
-  background: #111827;
-  color: white;
-  padding: 18px;
-}
+    .container {
+      max-width: 1500px;
+      margin: auto;
+    }
 
-header h1 {
-  margin: 0;
-  font-size: 20px;
-}
+    .header {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.08);
+    }
 
-header p {
-  margin: 5px 0 0;
-  font-size: 12px;
-}
+    h1 {
+      margin: 0;
+      color: #173d8e;
+    }
 
-.toolbar {
-  background: white;
-  padding: 12px;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(0,0,0,.1);
-}
+    .subtitle {
+      margin-top: 5px;
+      color: #66778d;
+    }
 
-button {
-  border: 0;
-  border-radius: 7px;
-  padding: 9px 13px;
-  cursor: pointer;
-  font-weight: bold;
-  background: #2563eb;
-  color: white;
-}
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
 
-button.secondary {
-  background: #4b5563;
-}
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: #173d8e;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
 
-button.danger {
-  background: #dc2626;
-}
+    button:hover {
+      opacity: .9;
+    }
 
-input[type="search"] {
-  flex: 1;
-  min-width: 220px;
-  border: 1px solid #d1d5db;
-  border-radius: 7px;
-  padding: 9px;
-}
+    button.secondary {
+      background: #e8edf6;
+      color: #24364e;
+    }
 
-main {
-  padding: 15px;
-}
+    button.danger {
+      background: #8f2d2d;
+    }
 
-.table-wrap {
-  background: white;
-  border-radius: 10px;
-  overflow-x: auto;
-  box-shadow: 0 2px 10px rgba(0,0,0,.08);
-}
+    .search {
+      width: 100%;
+      margin-top: 15px;
+      padding: 11px;
+      border: 1px solid #cbd6e5;
+      border-radius: 8px;
+      font-size: 14px;
+    }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 950px;
-}
+    .status {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 7px;
+      background: #f1f5f9;
+      color: #53647a;
+      font-weight: 700;
+      font-size: 13px;
+    }
 
-th,
-td {
-  padding: 9px;
-  border-bottom: 1px solid #e5e7eb;
-  text-align: left;
-  font-size: 12px;
-}
+    .status.ok {
+      color: #176b35;
+      background: #edf9f0;
+    }
 
-th {
-  background: #e5e7eb;
-}
+    .status.error {
+      color: #9a2727;
+      background: #fff0f0;
+    }
 
-tr:hover {
-  background: #f9fafb;
-}
+    .table-box {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.08);
+      overflow: auto;
+    }
 
-.empty {
-  padding: 30px;
-  text-align: center;
-  color: #6b7280;
-}
+    table {
+      width: 100%;
+      min-width: 1200px;
+      border-collapse: collapse;
+    }
 
-.actions {
-  display: flex;
-  gap: 5px;
-}
+    th {
+      background: #173d8e;
+      color: white;
+      padding: 11px 9px;
+      text-align: left;
+      font-size: 12px;
+      white-space: nowrap;
+    }
 
-.small {
-  padding: 5px 8px;
-  font-size: 11px;
-}
+    td {
+      padding: 10px 9px;
+      border-bottom: 1px solid #e4e9f0;
+      font-size: 12px;
+    }
 
-.status {
-  padding: 10px 15px;
-  font-size: 12px;
-}
+    tr:hover td {
+      background: #f7faff;
+    }
 
-</style>
+    .id {
+      font-family: monospace;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    .actions button {
+      padding: 6px 9px;
+      font-size: 11px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 40px;
+      color: #66778d;
+    }
+
+  </style>
 
 </head>
 
+
 <body>
 
-<header>
 
-<h1>
-📋 Registros — Vigilia Nacional Procesos 2026
-</h1>
-
-<p>
-Registros compartidos almacenados en Supabase
-</p>
-
-</header>
+<div class="container">
 
 
-<div class="toolbar">
+  <!-- ENCABEZADO -->
 
-<input
-  id="search"
-  type="search"
-  placeholder="Buscar por nombre, iglesia, teléfono..."
->
+  <div class="header">
 
-<button id="btnRefresh">
-  🔄 Actualizar
-</button>
+    <h1>
+      📋 Registros de Inscripción
+    </h1>
 
-<button id="btnSelectAll" class="secondary">
-  ☑️ Seleccionar todos
-</button>
+    <div class="subtitle">
+      Vigilia Nacional Procesos 2026
+    </div>
 
-<button id="btnClearSelection" class="secondary">
-  Deseleccionar
-</button>
 
-<button id="btnPrintSelected">
-  🖨️ Imprimir seleccionados
-</button>
+    <div class="toolbar">
 
-<button id="btnPrintAll">
-  🖨️ Imprimir todos
-</button>
+      <button
+        onclick="goBack()"
+      >
+        ← Nueva ficha
+      </button>
 
-<button
-  id="btnBack"
-  class="secondary"
->
-  ← Volver
-</button>
+
+      <button
+        class="secondary"
+        onclick="loadRecords()"
+      >
+        🔄 Actualizar
+      </button>
+
+
+      <button
+        class="secondary"
+        onclick="printSelected()"
+      >
+        🖨️ Imprimir seleccionados
+      </button>
+
+
+      <button
+        class="secondary"
+        onclick="printAll()"
+      >
+        🖨️ Imprimir todos
+      </button>
+
+    </div>
+
+
+    <input
+      id="search"
+      class="search"
+      type="search"
+      placeholder="🔎 Buscar por nombre, apellido, teléfono, iglesia, ID..."
+    >
+
+
+    <div
+      id="status"
+      class="status"
+    >
+      Cargando registros...
+    </div>
+
+  </div>
+
+
+  <!-- TABLA -->
+
+  <div class="table-box">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>
+            <input
+              type="checkbox"
+              id="selectAll"
+            >
+          </th>
+
+          <th>ID</th>
+
+          <th>Fecha</th>
+
+          <th>Nombres</th>
+
+          <th>Apellidos</th>
+
+          <th>Edad</th>
+
+          <th>Teléfono</th>
+
+          <th>Talla</th>
+
+          <th>Región</th>
+
+          <th>Distrito</th>
+
+          <th>Iglesia</th>
+
+          <th>Pago</th>
+
+          <th>Acciones</th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody
+        id="recordsBody"
+      ></tbody>
+
+    </table>
+
+  </div>
+
 
 </div>
 
 
-<div
-  id="status"
-  class="status"
->
-  Cargando registros...
-</div>
-
-
-<main>
-
-<div class="table-wrap">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th></th>
-
-<th>ID</th>
-
-<th>Fecha</th>
-
-<th>Nombres</th>
-
-<th>Apellidos</th>
-
-<th>Teléfono</th>
-
-<th>Talla</th>
-
-<th>Región</th>
-
-<th>Distrito</th>
-
-<th>Iglesia</th>
-
-<th>Pago</th>
-
-<th>Acciones</th>
-
-</tr>
-
-</thead>
-
-<tbody id="tbody">
-
-</tbody>
-
-</table>
-
-<div
-  id="empty"
-  class="empty"
-  style="display:none"
->
-  No hay registros.
-</div>
-
-</div>
-
-</main>
-
+<!-- ================================================= -->
+<!-- SUPABASE -->
+<!-- ================================================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="supabase-config.js"></script>
 
+
 <script>
 
-const supabase =
-  window.supabaseClient;
+  // =====================================================
+  // SUPABASE
+  // =====================================================
 
-let records = [];
-
-
-const tbody =
-  document.getElementById("tbody");
-
-const empty =
-  document.getElementById("empty");
-
-const status =
-  document.getElementById("status");
-
-const search =
-  document.getElementById("search");
+  const supabase =
+    window.supabaseClient;
 
 
-function esc(value) {
-
-  if (
-    value === null ||
-    value === undefined
-  ) return "";
-
-  return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
+  let allRecords = [];
 
 
-function render() {
+  // =====================================================
+  // ESTADO
+  // =====================================================
 
-  const query =
-    search.value
-      .toLowerCase()
-      .trim();
+  function setStatus(
+    message,
+    type = ""
+  ) {
 
-
-  const filtered =
-    records.filter(r => {
-
-      const text =
-        [
-          r.idRegistro,
-          r.nombres,
-          r.apellidos,
-          r.telefono,
-          r.iglesia,
-          r.region,
-          r.distrito
-        ]
-        .join(" ")
-        .toLowerCase();
-
-      return text.includes(query);
-
-    });
-
-
-  tbody.innerHTML = "";
-
-  empty.style.display =
-    filtered.length
-      ? "none"
-      : "block";
-
-
-  filtered.forEach(r => {
-
-    const tr =
-      document.createElement("tr");
-
-    tr.innerHTML = `
-
-      <td>
-        <input
-          type="checkbox"
-          class="record-check"
-          value="${esc(r.idRegistro)}"
-        >
-      </td>
-
-      <td>
-        ${esc(r.idRegistro)}
-      </td>
-
-      <td>
-        ${esc(r.fechaRegistro)}
-      </td>
-
-      <td>
-        ${esc(r.nombres)}
-      </td>
-
-      <td>
-        ${esc(r.apellidos)}
-      </td>
-
-      <td>
-        ${esc(r.telefono)}
-      </td>
-
-      <td>
-        ${esc(r.talla)}
-      </td>
-
-      <td>
-        ${esc(r.region)}
-      </td>
-
-      <td>
-        ${esc(r.distrito)}
-      </td>
-
-      <td>
-        ${esc(r.iglesia)}
-      </td>
-
-      <td>
-        C$ ${esc(r.monto)}
-      </td>
-
-      <td>
-
-        <div class="actions">
-
-          <button
-            class="small"
-            onclick="openRecord('${esc(r.idRegistro)}')"
-          >
-            Abrir
-          </button>
-
-          <button
-            class="small"
-            onclick="printOne('${esc(r.idRegistro)}')"
-          >
-            🖨️
-          </button>
-
-        </div>
-
-      </td>
-
-    `;
-
-    tbody.appendChild(tr);
-
-  });
-
-}
-
-
-async function loadRecords() {
-
-  status.textContent =
-    "Cargando...";
-
-  const {
-    data,
-    error
-  } =
-    await supabase
-      .from("registros_vigilia")
-      .select("*");
-
-
-  if (error) {
-
-    console.error(error);
+    const status =
+      document.getElementById(
+        "status"
+      );
 
     status.textContent =
-      "❌ " + error.message;
+      message;
 
-    return;
+    status.className =
+      "status " + type;
 
   }
 
 
-  records =
-    data || [];
+  // =====================================================
+  // CARGAR REGISTROS
+  // =====================================================
+
+  async function loadRecords() {
+
+    try {
+
+      setStatus(
+        "🔄 Cargando registros desde Supabase..."
+      );
 
 
-  records.sort(
-    (a,b) =>
-      String(b.idRegistro)
-        .localeCompare(
-          String(a.idRegistro)
+      if (!supabase) {
+
+        throw new Error(
+          "Supabase no está configurado."
+        );
+
+      }
+
+
+      console.log(
+        "📡 Consultando registros_vigilia..."
+      );
+
+
+      const {
+        data,
+        error
+      } = await supabase
+
+        .from(
+          "registros_vigilia"
         )
-  );
+
+        .select("*");
 
 
-  status.textContent =
-    `${records.length} registro(s) encontrado(s).`;
+      if (error) {
 
-  render();
+        console.error(
+          "❌ Error Supabase:",
+          error
+        );
 
-}
+        throw error;
 
-
-function getSelected() {
-
-  return [
-    ...document.querySelectorAll(
-      ".record-check:checked"
-    )
-  ].map(
-    checkbox =>
-      checkbox.value
-  );
-
-}
+      }
 
 
-window.openRecord =
-  function(id) {
+      allRecords =
+        data || [];
+
+
+      console.log(
+        "✅ Registros recibidos:",
+        allRecords
+      );
+
+
+      renderRecords(
+        allRecords
+      );
+
+
+      setStatus(
+
+        "✅ " +
+        allRecords.length +
+        " registro(s) cargado(s) desde Supabase.",
+
+        "ok"
+
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "❌ ERROR:",
+        error
+      );
+
+
+      setStatus(
+
+        "❌ No se pudieron cargar los registros: " +
+
+        (
+          error.message ||
+          "Error desconocido"
+        ),
+
+        "error"
+
+      );
+
+    }
+
+  }
+
+
+  // =====================================================
+  // ESCAPAR HTML
+  // =====================================================
+
+  function escapeHTML(value) {
+
+    if (
+      value === null ||
+      value === undefined
+    ) {
+
+      return "";
+
+    }
+
+
+    return String(value)
+
+      .replaceAll(
+        "&",
+        "&amp;"
+      )
+
+      .replaceAll(
+        "<",
+        "&lt;"
+      )
+
+      .replaceAll(
+        ">",
+        "&gt;"
+      )
+
+      .replaceAll(
+        '"',
+        "&quot;"
+      )
+
+      .replaceAll(
+        "'",
+        "&#039;"
+      );
+
+  }
+
+
+  // =====================================================
+  // MOSTRAR TABLA
+  // =====================================================
+
+  function renderRecords(
+    records
+  ) {
+
+    const body =
+      document.getElementById(
+        "recordsBody"
+      );
+
+
+    body.innerHTML = "";
+
+
+    if (
+      !records ||
+      records.length === 0
+    ) {
+
+      body.innerHTML = `
+
+        <tr>
+
+          <td
+            colspan="13"
+            class="empty"
+          >
+
+            📭 No hay registros para mostrar.
+
+          </td>
+
+        </tr>
+
+      `;
+
+      return;
+
+    }
+
+
+    records.forEach(
+      record => {
+
+        const row =
+          document.createElement(
+            "tr"
+          );
+
+
+        row.innerHTML = `
+
+          <td>
+
+            <input
+              type="checkbox"
+              class="record-check"
+              value="${escapeHTML(record.idRegistro)}"
+            >
+
+          </td>
+
+
+          <td class="id">
+
+            ${escapeHTML(
+              record.idRegistro
+            )}
+
+          </td>
+
+
+          <td>
+
+            ${escapeHTML(
+              record.fechaRegistro
+            )}
+
+          </td>
+
+
+          <td>
+
+            ${escapeHTML(
+              record.nombres
+            )}
+
+          </td>
+
+
+          <td>
+
+            ${escapeHTML(
+              record.apellidos
+            )}
+
+          </td>
+
+
+          <td>
+
+            ${escapeHTML(
+              record.edad
+            )}
+
+          </td>
+
+
+          <td>
+
+            ${escapeHTML(
+              record.telefono
+            )}
+
+          </td>
+
+
+          <td>
+
+            ${escapeHTML(
+              record.talla
+            )}
+
+          </td>
+
+
+          <td>
+
+            ${escapeHTML(
+              record.region
+            )}
+
+          </td>
+
+
+          <td>
+
+            ${escapeHTML(
+              record.distrito
+            )}
+
+          </td>
+
+
+          <td>
+
+            ${escapeHTML(
+              record.iglesia
+            )}
+
+          </td>
+
+
+          <td>
+
+            ${
+              record.monto
+                ? "C$ " +
+                  escapeHTML(
+                    record.monto
+                  )
+                : ""
+            }
+
+          </td>
+
+
+          <td>
+
+            <div class="actions">
+
+              <button
+                onclick="openRecord('${encodeURIComponent(record.idRegistro)}')"
+              >
+                👁️ Ver
+              </button>
+
+
+              <button
+                class="secondary"
+                onclick="printOne('${encodeURIComponent(record.idRegistro)}')"
+              >
+                🖨️
+              </button>
+
+            </div>
+
+          </td>
+
+        `;
+
+
+        body.appendChild(
+          row
+        );
+
+      }
+    );
+
+  }
+
+
+  // =====================================================
+  // VER REGISTRO
+  // =====================================================
+
+  function openRecord(
+    encodedId
+  ) {
+
+    const id =
+      decodeURIComponent(
+        encodedId
+      );
+
 
     window.location.href =
       "imprimir.html?ids=" +
-      encodeURIComponent(id);
+      encodeURIComponent(
+        id
+      );
 
-  };
+  }
 
 
-window.printOne =
-  function(id) {
+  // =====================================================
+  // IMPRIMIR UNO
+  // =====================================================
+
+  function printOne(
+    encodedId
+  ) {
+
+    const id =
+      decodeURIComponent(
+        encodedId
+      );
+
 
     window.open(
+
       "imprimir.html?ids=" +
-      encodeURIComponent(id),
+      encodeURIComponent(
+        id
+      ),
+
       "_blank"
+
     );
 
-  };
+  }
 
 
-document
-  .getElementById("btnRefresh")
-  .addEventListener(
-    "click",
-    loadRecords
-  );
+  // =====================================================
+  // SELECCIONAR TODOS
+  // =====================================================
 
+  document
+    .getElementById(
+      "selectAll"
+    )
+    .addEventListener(
+      "change",
+      function () {
 
-document
-  .getElementById("btnBack")
-  .addEventListener(
-    "click",
-    () => {
-      window.location.href =
-        "index.html";
-    }
-  );
-
-
-document
-  .getElementById("btnSelectAll")
-  .addEventListener(
-    "click",
-    () => {
-
-      document
-        .querySelectorAll(
-          ".record-check"
-        )
-        .forEach(
-          checkbox =>
-            checkbox.checked = true
-        );
-
-    }
-  );
-
-
-document
-  .getElementById("btnClearSelection")
-  .addEventListener(
-    "click",
-    () => {
-
-      document
-        .querySelectorAll(
-          ".record-check"
-        )
-        .forEach(
-          checkbox =>
-            checkbox.checked = false
-        );
-
-    }
-  );
-
-
-document
-  .getElementById("btnPrintSelected")
-  .addEventListener(
-    "click",
-    () => {
-
-      const ids =
-        getSelected();
-
-      if (!ids.length) {
-
-        alert(
-          "Selecciona al menos un registro."
-        );
-
-        return;
-
-      }
-
-      window.open(
-        "imprimir.html?ids=" +
-        ids
-          .map(encodeURIComponent)
-          .join(","),
-        "_blank"
-      );
-
-    }
-  );
-
-
-document
-  .getElementById("btnPrintAll")
-  .addEventListener(
-    "click",
-    () => {
-
-      if (!records.length) {
-
-        alert(
-          "No hay registros."
-        );
-
-        return;
-
-      }
-
-      window.open(
-        "imprimir.html?ids=" +
-        records
-          .map(r =>
-            encodeURIComponent(
-              r.idRegistro
-            )
+        document
+          .querySelectorAll(
+            ".record-check"
           )
-          .join(","),
-        "_blank"
+          .forEach(
+            checkbox => {
+
+              checkbox.checked =
+                this.checked;
+
+            }
+          );
+
+      }
+    );
+
+
+  // =====================================================
+  // OBTENER SELECCIONADOS
+  // =====================================================
+
+  function getSelectedIds() {
+
+    return Array.from(
+
+      document.querySelectorAll(
+        ".record-check:checked"
+      )
+
+    ).map(
+      checkbox =>
+        checkbox.value
+    );
+
+  }
+
+
+  // =====================================================
+  // IMPRIMIR SELECCIONADOS
+  // =====================================================
+
+  function printSelected() {
+
+    const ids =
+      getSelectedIds();
+
+
+    if (
+      ids.length === 0
+    ) {
+
+      alert(
+        "⚠️ Selecciona al menos un registro."
       );
 
+      return;
+
     }
-  );
 
 
-search.addEventListener(
-  "input",
-  render
-);
+    window.open(
+
+      "imprimir.html?ids=" +
+      encodeURIComponent(
+        ids.join(",")
+      ),
+
+      "_blank"
+
+    );
+
+  }
 
 
-loadRecords();
+  // =====================================================
+  // IMPRIMIR TODOS
+  // =====================================================
+
+  function printAll() {
+
+    if (
+      allRecords.length === 0
+    ) {
+
+      alert(
+        "⚠️ No hay registros para imprimir."
+      );
+
+      return;
+
+    }
+
+
+    const ids =
+      allRecords.map(
+        record =>
+          record.idRegistro
+      );
+
+
+    window.open(
+
+      "imprimir.html?ids=" +
+      encodeURIComponent(
+        ids.join(",")
+      ),
+
+      "_blank"
+
+    );
+
+  }
+
+
+  // =====================================================
+  // BÚSQUEDA
+  // =====================================================
+
+  document
+    .getElementById(
+      "search"
+    )
+    .addEventListener(
+      "input",
+      function () {
+
+        const text =
+          this.value
+            .toLowerCase()
+            .trim();
+
+
+        if (!text) {
+
+          renderRecords(
+            allRecords
+          );
+
+          return;
+
+        }
+
+
+        const filtered =
+          allRecords.filter(
+            record => {
+
+              const content = [
+
+                record.idRegistro,
+
+                record.fechaRegistro,
+
+                record.nombres,
+
+                record.apellidos,
+
+                record.edad,
+
+                record.telefono,
+
+                record.correo,
+
+                record.talla,
+
+                record.region,
+
+                record.distrito,
+
+                record.iglesia,
+
+                record.pastor,
+
+                record.cargo,
+
+                record.condicionMedica,
+
+                record.detalleMedico,
+
+                record.monto
+
+              ]
+
+                .join(" ")
+                .toLowerCase();
+
+
+              return content.includes(
+                text
+              );
+
+            }
+          );
+
+
+        renderRecords(
+          filtered
+        );
+
+      }
+    );
+
+
+  // =====================================================
+  // VOLVER
+  // =====================================================
+
+  function goBack() {
+
+    window.location.href =
+      "index.html";
+
+  }
+
+
+  // =====================================================
+  // INICIAR
+  // =====================================================
+
+  loadRecords();
 
 </script>
+
 
 </body>
 
