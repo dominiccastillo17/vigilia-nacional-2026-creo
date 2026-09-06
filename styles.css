@@ -24,7 +24,7 @@ body { min-height: 100vh; }
 .server-box summary { cursor: pointer; font-weight: 700; color: #24364e; margin-bottom: 8px; }
 .server-box label { display: block; font-size: 12px; font-weight: 700; margin: 7px 0 4px; }
 .server-box input { width: 100%; padding: 8px; border: 1px solid #bcc8d8; border-radius: 7px; font-size: 12px; }
-.server-box small { display: block; margin-top: 5px; color: #66778d; line-height: 1.3; }
+.server-box small { display: block; margin-top: 5px; color: #66778d; line-height: 0.5; }
 #status { min-height: 20px; padding-top: 6px; font-size: 12px; font-weight: 700; }
 
 .page-wrap { padding: 28px 28px 50px 300px; display: flex; justify-content: center; }
