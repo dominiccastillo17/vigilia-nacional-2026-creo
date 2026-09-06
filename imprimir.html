@@ -3,118 +3,105 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Registros - Vigilia Nacional Procesos 2026</title>
+<title>PDF - Registros Vigilia 2026</title>
 <link rel="stylesheet" href="styles.css">
 <style>
-body{background:#eef1f5}
-.records-page{max-width:1200px;margin:28px auto;padding:0 20px;font-family:Arial,Helvetica,sans-serif}
-.records-head{background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.1);margin-bottom:18px}
-.records-head h1{color:#173d8e;margin:0 0 6px}.records-head p{margin:0;color:#53647a}
-.records-tools{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}
-.records-tools button{border:0;border-radius:8px;padding:10px 14px;background:#173d8e;color:#fff;font-weight:700;cursor:pointer}
-.records-tools button.secondary{background:#e8edf6;color:#24364e}
-.records-tools button.danger{background:#8f2d2d}
-#search{flex:1;min-width:260px;padding:10px;border:1px solid #bcc8d8;border-radius:7px}
-#summary{margin-top:12px;font-size:13px;font-weight:700;color:#53647a}
-.record-list{display:grid;gap:12px}
-.record-card{background:#fff;border:1px solid #d9e0ea;border-radius:10px;padding:15px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-.record-card strong{color:#173d8e;font-size:17px}
-.record-meta{color:#65758a;font-size:12px;margin-top:5px}
-.record-actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
-.record-actions button{border:0;border-radius:7px;padding:8px 12px;background:#173d8e;color:#fff;font-weight:700;cursor:pointer}
-.record-actions button.secondary{background:#e8edf6;color:#24364e}
-.record-actions button.danger{background:#8f2d2d}
-.select-row{display:flex;align-items:center;gap:10px;margin-top:10px}
-.select-row input{width:18px;height:18px}
-.empty{background:#fff;padding:30px;text-align:center;border-radius:10px;color:#66778d}
-.top-check{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#24364e}
-@media print{.no-print{display:none!important}}
+body{margin:0;background:#eef1f5;font-family:Arial,Helvetica,sans-serif}
+.pdf-tools{position:fixed;right:18px;top:18px;z-index:10;display:flex;gap:8px}
+.pdf-tools button{border:0;border-radius:8px;padding:10px 14px;background:#173d8e;color:#fff;font-weight:700;cursor:pointer}
+.pdf-tools button.secondary{background:#e8edf6;color:#24364e}
+.pdf-sheet{width:210mm;min-height:297mm;margin:20px auto;background:#fff;padding:12mm 12mm 10mm;box-shadow:0 4px 24px rgba(0,0,0,.12);box-sizing:border-box}
+.pdf-sheet + .pdf-sheet{page-break-before:always}
+.pdf-sheet input,.pdf-sheet textarea{pointer-events:none}
+.pdf-sheet .print-id{font-size:9px;color:#65758a;text-align:right;margin-bottom:3px}
+@media print{
+  body{background:#fff}
+  .no-print{display:none!important}
+  .pdf-sheet{margin:0;box-shadow:none}
+}
 </style>
 </head>
 <body>
-<main class="records-page">
-  <section class="records-head">
-    <h1>Registros de inscripción</h1>
-    <p>Aquí se guardan todas las fichas rellenadas desde esta computadora y este navegador.</p>
-    <div class="records-tools">
-      <button id="newBtn">➕ Nueva ficha</button>
-      <button id="allPdfBtn">📄 Crear PDF de todos</button>
-      <button id="selectedPdfBtn" class="secondary">📄 PDF seleccionados</button>
-      <button id="deleteAllBtn" class="danger">🗑 Borrar todos</button>
-    </div>
-    <div id="summary"></div>
-  </section>
-
-  <div id="recordList" class="record-list"></div>
-</main>
+<div class="pdf-tools no-print">
+  <button onclick="window.print()">📄 Guardar PDF / Imprimir</button>
+  <button class="secondary" onclick="location.href='registros.html'">← Volver</button>
+</div>
+<div id="pdfContainer"></div>
 
 <script>
 const KEY='vigilia2026_registros';
-const list=document.getElementById('recordList');
-const summary=document.getElementById('summary');
+const IDS_KEY='vigilia2026_pdf_ids';
+const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
 function getRecords(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
-function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function box(name,value,checkedValue=''){
+  return `<input type="text" value="${esc(value)}" aria-label="${name}">`;
+}
+function check(value,selected){return `<input type="checkbox" ${value===selected?'checked':''}>`}
+function sheet(r){
+ return `<section class="pdf-sheet">
+   <div class="print-id">Registro: ${esc(r.idRegistro)} · ${esc(r.fechaRegistro)}</div>
+   <header class="sheet-header">
+    <div class="top-pill">VIGILIA NACIONAL PROCESOS 2026</div>
+    <h1>FICHA OFICIAL DE INSCRIPCIÓN FÍSICA</h1>
+    <h2>Ministerio Nacional de Jóvenes IDP — Nicaragua</h2>
+   </header>
+   <section class="form-section">
+    <div class="section-title"><span>📝</span> SECCIÓN 1: DATOS PERSONALES DEL ASISTENTE</div>
+    <div class="field-row full"><label>NOMBRES COMPLETOS:</label>${box('nombres',r.nombres)}</div>
+    <div class="field-row full"><label>APELLIDOS COMPLETOS:</label>${box('apellidos',r.apellidos)}</div>
+    <div class="grid-2 age-phone">
+      <div class="field-row inline-field"><label>EDAD:</label><span class="bracket">[</span>${box('edad',r.edad)}<span class="bracket">]</span><span>años</span></div>
+      <div class="field-row inline-field grow-line"><label>TELÉFONO / WHATSAPP:</label>${box('telefono',r.telefono)}</div>
+    </div>
+    <div class="field-row full email-row"><label>CORREO<br>ELECTRÓNICO:</label>${box('correo',r.correo)}</div>
+    <div class="sub-label">TALLA DE CAMISA SOLICITADA <span>(MARCAR ÚNICAMENTE UNA CASILLA) :</span></div>
+    <div class="check-grid shirt-grid">
+      <label>${check('14 Juvenil',r.talla)} Talla 14 (Juvenil)</label><label>${check('S Adulto',r.talla)} Talla S (Adulto)</label><label>${check('XL Adulto',r.talla)} Talla XL (Adulto)</label>
+      <label>${check('16 Juvenil',r.talla)} Talla 16 (Juvenil)</label><label>${check('M Adulto',r.talla)} Talla M (Adulto)</label><label>${check('2XL Adulto',r.talla)} Talla 2XL (Adulto)</label>
+      <label>${check('18 Juvenil',r.talla)} Talla 18 (Juvenil)</label><label>${check('L Adulto',r.talla)} Talla L (Adulto)</label><label>${check('3XL Adulto',r.talla)} Talla 3XL (Adulto)</label>
+    </div>
+   </section>
+   <section class="form-section">
+    <div class="section-title"><span>⛪</span> SECCIÓN 2: INFORMACIÓN DE LA IGLESIA</div>
+    <div class="grid-2 region-district">
+      <div class="field-row inline-field"><label>REGIÓN:</label><span>[ Región No.</span>${box('region',r.region)}<span>]</span></div>
+      <div class="field-row inline-field"><label>DISTRITO:</label><span>[ Distrito No.</span>${box('distrito',r.distrito)}<span>]</span></div>
+    </div>
+    <div class="field-row full church-name"><label>NOMBRE DE LA IGLESIA<br>LOCAL:</label>${box('iglesia',r.iglesia)}</div>
+    <div class="field-row full"><label>NOMBRE DEL PASTOR LOCAL:</label>${box('pastor',r.pastor)}</div>
+    <div class="sub-label role-title">CARGO / FUNCIÓN EN LA IGLESIA:</div>
+    <div class="check-grid role-grid">
+      <label>${check('Líder',r.cargo)} Líder</label><label>${check('Miembro',r.cargo)} Miembro</label><label>${check('Amigo',r.cargo)} Amigo</label>
+    </div>
+   </section>
+   <section class="form-section medical-section">
+    <div class="section-title"><span>🩺</span> SECCIÓN 3: FICHA MÉDICA Y ALERGIAS (OBLIGATORIO)</div>
+    <div class="question">¿PADECE ALGUNA ALERGIA, ENFERMEDAD CRÓNICA O CONDICIÓN MÉDICA ESPECIAL?</div>
+    <div class="medical-options">
+      <label>${check('NO',r.condicionMedica)} NO</label>
+      <label>${check('SÍ',r.condicionMedica)} SÍ (Especificar detalles a continuación):</label>
+    </div>
+    <textarea rows="2">${esc(r.detalleMedico)}</textarea>
+    <div class="example">*(Ejemplo: Alérgico a la penicilina, asma severa, alergia al maní, etc.)*</div>
+   </section>
+   <section class="form-section payment-section">
+    <div class="section-title"><span>💵</span> SECCIÓN 4: CONTROL DE PAGO EN EFECTIVO (USO EXCLUSIVO DEL LÍDER REGIONAL)</div>
+    <div class="payment-grid">
+      <div><div class="payment-label">MONTO RECIBIDO:</div><div class="money-line"><b>C$</b>${box('monto',r.monto)}<b>NIO</b></div></div>
+      <div><div class="payment-label">FIRMA DE RECIBIDO DEL LÍDER REGIONAL:</div><input class="signature-line" type="text" value="${esc(r.firmaLider)}"></div>
+      <div><div class="payment-label">FECHA DE RECEPCIÓN:</div><div class="date-line"><span>[</span>${box('dia',r.dia)}<span>/</span>${box('mes',r.mes)}<span>/ 2026 ]</span></div></div>
+    </div>
+   </section>
+   <footer class="sheet-footer">Nota: Esta ficha debe ser entregada al Líder Regional junto con la cuota de inscripción en efectivo para su registro oficial en el sistema.</footer>
+ </section>`;
+}
 
-function render(){
-  const records=getRecords();
-  summary.textContent=`${records.length} inscrito(s) registrado(s). Selecciona los que quieras incluir en el PDF.`;
-  if(!records.length){list.innerHTML='<div class="empty">Todavía no hay registros. Presiona “Nueva ficha” para comenzar.</div>';return;}
-  list.innerHTML=`
-    <div class="record-card">
-      <label class="top-check"><input id="selectAll" type="checkbox"> Seleccionar todos</label>
-    </div>`+
-    records.map(r=>`
-    <article class="record-card">
-      <div class="select-row">
-        <input class="record-check" type="checkbox" value="${esc(r.idRegistro)}">
-        <strong>${esc(r.nombres)} ${esc(r.apellidos)}</strong>
-      </div>
-      <div class="record-meta">ID: ${esc(r.idRegistro)} · Registrado: ${esc(r.fechaRegistro)}</div>
-      <div class="record-meta">Región ${esc(r.region)} · Distrito ${esc(r.distrito)} · Iglesia: ${esc(r.iglesia)}</div>
-      <div class="record-meta">Teléfono: ${esc(r.telefono)} · Talla: ${esc(r.talla)} · Cargo: ${esc(r.cargo)}</div>
-      <div class="record-actions">
-        <button onclick="openRecord('${esc(r.idRegistro)}')">Abrir ficha</button>
-        <button class="secondary" onclick="printOne('${esc(r.idRegistro)}')">PDF / Imprimir</button>
-        <button class="danger" onclick="deleteOne('${esc(r.idRegistro)}')">Eliminar</button>
-      </div>
-    </article>`).join('');
-
-  document.getElementById('selectAll').onchange=e=>{
-    document.querySelectorAll('.record-check').forEach(c=>c.checked=e.target.checked);
-  };
-}
-function openRecord(id){location.href='index.html?id='+encodeURIComponent(id)}
-function printOne(id){localStorage.setItem('vigilia2026_pdf_ids',JSON.stringify([id]));location.href='imprimir.html'}
-function selectedIds(){return [...document.querySelectorAll('.record-check:checked')].map(x=>x.value)}
-function printSelected(){
-  const ids=selectedIds();
-  if(!ids.length){alert('Selecciona al menos un registro.');return;}
-  localStorage.setItem('vigilia2026_pdf_ids',JSON.stringify(ids));
-  location.href='imprimir.html';
-}
-function printAll(){
-  const ids=getRecords().map(r=>r.idRegistro);
-  if(!ids.length){alert('No hay registros para crear el PDF.');return;}
-  localStorage.setItem('vigilia2026_pdf_ids',JSON.stringify(ids));
-  location.href='imprimir.html';
-}
-function deleteOne(id){
-  if(!confirm('¿Eliminar este registro? Esta acción no se puede deshacer.'))return;
-  localStorage.setItem(KEY,JSON.stringify(getRecords().filter(r=>r.idRegistro!==id)));
-  render();
-}
-document.getElementById('newBtn').onclick=()=>location.href='index.html';
-document.getElementById('allPdfBtn').onclick=printAll;
-document.getElementById('selectedPdfBtn').onclick=printSelected;
-document.getElementById('deleteAllBtn').onclick=()=>{
-  const r=getRecords();
-  if(!r.length)return;
-  if(confirm('¿Borrar TODOS los registros de este navegador? Esta acción no se puede deshacer.')){
-    localStorage.removeItem(KEY);render();
-  }
-};
-render();
+const ids=JSON.parse(localStorage.getItem(IDS_KEY)||'[]');
+const all=getRecords();
+const chosen=ids.length?all.filter(r=>ids.includes(r.idRegistro)):all;
+document.getElementById('pdfContainer').innerHTML=chosen.map(sheet).join('');
+localStorage.removeItem(IDS_KEY);
 </script>
 </body>
 </html>
