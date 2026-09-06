@@ -1,988 +1,120 @@
 <!doctype html>
 <html lang="es">
-
 <head>
-
-  <meta charset="utf-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
-
-  <title>Registros - Vigilia Nacional Procesos 2026</title>
-
-  <style>
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 20px;
-      background: #eef1f5;
-      color: #2f3d52;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .container {
-      max-width: 1500px;
-      margin: auto;
-    }
-
-    .header {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.08);
-    }
-
-    h1 {
-      margin: 0;
-      color: #173d8e;
-    }
-
-    .subtitle {
-      margin-top: 5px;
-      color: #66778d;
-    }
-
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 18px;
-    }
-
-    button {
-      border: 0;
-      border-radius: 8px;
-      padding: 10px 14px;
-      background: #173d8e;
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    button:hover {
-      opacity: .9;
-    }
-
-    button.secondary {
-      background: #e8edf6;
-      color: #24364e;
-    }
-
-    button.danger {
-      background: #8f2d2d;
-    }
-
-    .search {
-      width: 100%;
-      margin-top: 15px;
-      padding: 11px;
-      border: 1px solid #cbd6e5;
-      border-radius: 8px;
-      font-size: 14px;
-    }
-
-    .status {
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 7px;
-      background: #f1f5f9;
-      color: #53647a;
-      font-weight: 700;
-      font-size: 13px;
-    }
-
-    .status.ok {
-      color: #176b35;
-      background: #edf9f0;
-    }
-
-    .status.error {
-      color: #9a2727;
-      background: #fff0f0;
-    }
-
-    .table-box {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.08);
-      overflow: auto;
-    }
-
-    table {
-      width: 100%;
-      min-width: 1200px;
-      border-collapse: collapse;
-    }
-
-    th {
-      background: #173d8e;
-      color: white;
-      padding: 11px 9px;
-      text-align: left;
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    td {
-      padding: 10px 9px;
-      border-bottom: 1px solid #e4e9f0;
-      font-size: 12px;
-    }
-
-    tr:hover td {
-      background: #f7faff;
-    }
-
-    .id {
-      font-family: monospace;
-      font-size: 11px;
-      white-space: nowrap;
-    }
-
-    .actions {
-      display: flex;
-      gap: 5px;
-    }
-
-    .actions button {
-      padding: 6px 9px;
-      font-size: 11px;
-    }
-
-    .empty {
-      text-align: center;
-      padding: 40px;
-      color: #66778d;
-    }
-
-  </style>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registros - Vigilia Nacional Procesos 2026</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body{background:#eef1f5}
+.records-page{max-width:1200px;margin:28px auto;padding:0 20px;font-family:Arial,Helvetica,sans-serif}
+.records-head{background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.1);margin-bottom:18px}
+.records-head h1{color:#173d8e;margin:0 0 6px}.records-head p{margin:0;color:#53647a}
+.records-tools{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}
+.records-tools button{border:0;border-radius:8px;padding:10px 14px;background:#173d8e;color:#fff;font-weight:700;cursor:pointer}
+.records-tools button.secondary{background:#e8edf6;color:#24364e}
+.records-tools button.danger{background:#8f2d2d}
+#search{flex:1;min-width:260px;padding:10px;border:1px solid #bcc8d8;border-radius:7px}
+#summary{margin-top:12px;font-size:13px;font-weight:700;color:#53647a}
+.record-list{display:grid;gap:12px}
+.record-card{background:#fff;border:1px solid #d9e0ea;border-radius:10px;padding:15px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.record-card strong{color:#173d8e;font-size:17px}
+.record-meta{color:#65758a;font-size:12px;margin-top:5px}
+.record-actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+.record-actions button{border:0;border-radius:7px;padding:8px 12px;background:#173d8e;color:#fff;font-weight:700;cursor:pointer}
+.record-actions button.secondary{background:#e8edf6;color:#24364e}
+.record-actions button.danger{background:#8f2d2d}
+.select-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+.select-row input{width:18px;height:18px}
+.empty{background:#fff;padding:30px;text-align:center;border-radius:10px;color:#66778d}
+.top-check{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#24364e}
+@media print{.no-print{display:none!important}}
+</style>
 </head>
-
-
 <body>
-
-
-<div class="container">
-
-
-  <!-- ENCABEZADO -->
-
-  <div class="header">
-
-    <h1>
-      📋 Registros de Inscripción
-    </h1>
-
-    <div class="subtitle">
-      Vigilia Nacional Procesos 2026
+<main class="records-page">
+  <section class="records-head">
+    <h1>Registros de inscripción</h1>
+    <p>Aquí se guardan todas las fichas rellenadas desde esta computadora y este navegador.</p>
+    <div class="records-tools">
+      <button id="newBtn">➕ Nueva ficha</button>
+      <button id="allPdfBtn">📄 Crear PDF de todos</button>
+      <button id="selectedPdfBtn" class="secondary">📄 PDF seleccionados</button>
+      <button id="deleteAllBtn" class="danger">🗑 Borrar todos</button>
     </div>
+    <div id="summary"></div>
+  </section>
 
-
-    <div class="toolbar">
-
-      <button
-        onclick="goBack()"
-      >
-        ← Nueva ficha
-      </button>
-
-
-      <button
-        class="secondary"
-        onclick="loadRecords()"
-      >
-        🔄 Actualizar
-      </button>
-
-
-      <button
-        class="secondary"
-        onclick="printSelected()"
-      >
-        🖨️ Imprimir seleccionados
-      </button>
-
-
-      <button
-        class="secondary"
-        onclick="printAll()"
-      >
-        🖨️ Imprimir todos
-      </button>
-
-    </div>
-
-
-    <input
-      id="search"
-      class="search"
-      type="search"
-      placeholder="🔎 Buscar por nombre, apellido, teléfono, iglesia, ID..."
-    >
-
-
-    <div
-      id="status"
-      class="status"
-    >
-      Cargando registros...
-    </div>
-
-  </div>
-
-
-  <!-- TABLA -->
-
-  <div class="table-box">
-
-    <table>
-
-      <thead>
-
-        <tr>
-
-          <th>
-            <input
-              type="checkbox"
-              id="selectAll"
-            >
-          </th>
-
-          <th>ID</th>
-
-          <th>Fecha</th>
-
-          <th>Nombres</th>
-
-          <th>Apellidos</th>
-
-          <th>Edad</th>
-
-          <th>Teléfono</th>
-
-          <th>Talla</th>
-
-          <th>Región</th>
-
-          <th>Distrito</th>
-
-          <th>Iglesia</th>
-
-          <th>Pago</th>
-
-          <th>Acciones</th>
-
-        </tr>
-
-      </thead>
-
-
-      <tbody
-        id="recordsBody"
-      ></tbody>
-
-    </table>
-
-  </div>
-
-
-</div>
-
-
-<!-- ================================================= -->
-<!-- SUPABASE -->
-<!-- ================================================= -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="supabase-config.js"></script>
-
+  <div id="recordList" class="record-list"></div>
+</main>
 
 <script>
+const KEY='vigilia2026_registros';
+const list=document.getElementById('recordList');
+const summary=document.getElementById('summary');
 
-  // =====================================================
-  // SUPABASE
-  // =====================================================
+function getRecords(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
+function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 
-  const supabase =
-    window.supabaseClient;
+function render(){
+  const records=getRecords();
+  summary.textContent=`${records.length} inscrito(s) registrado(s). Selecciona los que quieras incluir en el PDF.`;
+  if(!records.length){list.innerHTML='<div class="empty">Todavía no hay registros. Presiona “Nueva ficha” para comenzar.</div>';return;}
+  list.innerHTML=`
+    <div class="record-card">
+      <label class="top-check"><input id="selectAll" type="checkbox"> Seleccionar todos</label>
+    </div>`+
+    records.map(r=>`
+    <article class="record-card">
+      <div class="select-row">
+        <input class="record-check" type="checkbox" value="${esc(r.idRegistro)}">
+        <strong>${esc(r.nombres)} ${esc(r.apellidos)}</strong>
+      </div>
+      <div class="record-meta">ID: ${esc(r.idRegistro)} · Registrado: ${esc(r.fechaRegistro)}</div>
+      <div class="record-meta">Región ${esc(r.region)} · Distrito ${esc(r.distrito)} · Iglesia: ${esc(r.iglesia)}</div>
+      <div class="record-meta">Teléfono: ${esc(r.telefono)} · Talla: ${esc(r.talla)} · Cargo: ${esc(r.cargo)}</div>
+      <div class="record-actions">
+        <button onclick="openRecord('${esc(r.idRegistro)}')">Abrir ficha</button>
+        <button class="secondary" onclick="printOne('${esc(r.idRegistro)}')">PDF / Imprimir</button>
+        <button class="danger" onclick="deleteOne('${esc(r.idRegistro)}')">Eliminar</button>
+      </div>
+    </article>`).join('');
 
-
-  let allRecords = [];
-
-
-  // =====================================================
-  // ESTADO
-  // =====================================================
-
-  function setStatus(
-    message,
-    type = ""
-  ) {
-
-    const status =
-      document.getElementById(
-        "status"
-      );
-
-    status.textContent =
-      message;
-
-    status.className =
-      "status " + type;
-
+  document.getElementById('selectAll').onchange=e=>{
+    document.querySelectorAll('.record-check').forEach(c=>c.checked=e.target.checked);
+  };
+}
+function openRecord(id){location.href='index.html?id='+encodeURIComponent(id)}
+function printOne(id){localStorage.setItem('vigilia2026_pdf_ids',JSON.stringify([id]));location.href='imprimir.html'}
+function selectedIds(){return [...document.querySelectorAll('.record-check:checked')].map(x=>x.value)}
+function printSelected(){
+  const ids=selectedIds();
+  if(!ids.length){alert('Selecciona al menos un registro.');return;}
+  localStorage.setItem('vigilia2026_pdf_ids',JSON.stringify(ids));
+  location.href='imprimir.html';
+}
+function printAll(){
+  const ids=getRecords().map(r=>r.idRegistro);
+  if(!ids.length){alert('No hay registros para crear el PDF.');return;}
+  localStorage.setItem('vigilia2026_pdf_ids',JSON.stringify(ids));
+  location.href='imprimir.html';
+}
+function deleteOne(id){
+  if(!confirm('¿Eliminar este registro? Esta acción no se puede deshacer.'))return;
+  localStorage.setItem(KEY,JSON.stringify(getRecords().filter(r=>r.idRegistro!==id)));
+  render();
+}
+document.getElementById('newBtn').onclick=()=>location.href='index.html';
+document.getElementById('allPdfBtn').onclick=printAll;
+document.getElementById('selectedPdfBtn').onclick=printSelected;
+document.getElementById('deleteAllBtn').onclick=()=>{
+  const r=getRecords();
+  if(!r.length)return;
+  if(confirm('¿Borrar TODOS los registros de este navegador? Esta acción no se puede deshacer.')){
+    localStorage.removeItem(KEY);render();
   }
-
-
-  // =====================================================
-  // CARGAR REGISTROS
-  // =====================================================
-
-  async function loadRecords() {
-
-    try {
-
-      setStatus(
-        "🔄 Cargando registros desde Supabase..."
-      );
-
-
-      if (!supabase) {
-
-        throw new Error(
-          "Supabase no está configurado."
-        );
-
-      }
-
-
-      console.log(
-        "📡 Consultando registros_vigilia..."
-      );
-
-
-      const {
-        data,
-        error
-      } = await supabase
-
-        .from(
-          "registros_vigilia"
-        )
-
-        .select("*");
-
-
-      if (error) {
-
-        console.error(
-          "❌ Error Supabase:",
-          error
-        );
-
-        throw error;
-
-      }
-
-
-      allRecords =
-        data || [];
-
-
-      console.log(
-        "✅ Registros recibidos:",
-        allRecords
-      );
-
-
-      renderRecords(
-        allRecords
-      );
-
-
-      setStatus(
-
-        "✅ " +
-        allRecords.length +
-        " registro(s) cargado(s) desde Supabase.",
-
-        "ok"
-
-      );
-
-
-    } catch (error) {
-
-      console.error(
-        "❌ ERROR:",
-        error
-      );
-
-
-      setStatus(
-
-        "❌ No se pudieron cargar los registros: " +
-
-        (
-          error.message ||
-          "Error desconocido"
-        ),
-
-        "error"
-
-      );
-
-    }
-
-  }
-
-
-  // =====================================================
-  // ESCAPAR HTML
-  // =====================================================
-
-  function escapeHTML(value) {
-
-    if (
-      value === null ||
-      value === undefined
-    ) {
-
-      return "";
-
-    }
-
-
-    return String(value)
-
-      .replaceAll(
-        "&",
-        "&amp;"
-      )
-
-      .replaceAll(
-        "<",
-        "&lt;"
-      )
-
-      .replaceAll(
-        ">",
-        "&gt;"
-      )
-
-      .replaceAll(
-        '"',
-        "&quot;"
-      )
-
-      .replaceAll(
-        "'",
-        "&#039;"
-      );
-
-  }
-
-
-  // =====================================================
-  // MOSTRAR TABLA
-  // =====================================================
-
-  function renderRecords(
-    records
-  ) {
-
-    const body =
-      document.getElementById(
-        "recordsBody"
-      );
-
-
-    body.innerHTML = "";
-
-
-    if (
-      !records ||
-      records.length === 0
-    ) {
-
-      body.innerHTML = `
-
-        <tr>
-
-          <td
-            colspan="13"
-            class="empty"
-          >
-
-            📭 No hay registros para mostrar.
-
-          </td>
-
-        </tr>
-
-      `;
-
-      return;
-
-    }
-
-
-    records.forEach(
-      record => {
-
-        const row =
-          document.createElement(
-            "tr"
-          );
-
-
-        row.innerHTML = `
-
-          <td>
-
-            <input
-              type="checkbox"
-              class="record-check"
-              value="${escapeHTML(record.idRegistro)}"
-            >
-
-          </td>
-
-
-          <td class="id">
-
-            ${escapeHTML(
-              record.idRegistro
-            )}
-
-          </td>
-
-
-          <td>
-
-            ${escapeHTML(
-              record.fechaRegistro
-            )}
-
-          </td>
-
-
-          <td>
-
-            ${escapeHTML(
-              record.nombres
-            )}
-
-          </td>
-
-
-          <td>
-
-            ${escapeHTML(
-              record.apellidos
-            )}
-
-          </td>
-
-
-          <td>
-
-            ${escapeHTML(
-              record.edad
-            )}
-
-          </td>
-
-
-          <td>
-
-            ${escapeHTML(
-              record.telefono
-            )}
-
-          </td>
-
-
-          <td>
-
-            ${escapeHTML(
-              record.talla
-            )}
-
-          </td>
-
-
-          <td>
-
-            ${escapeHTML(
-              record.region
-            )}
-
-          </td>
-
-
-          <td>
-
-            ${escapeHTML(
-              record.distrito
-            )}
-
-          </td>
-
-
-          <td>
-
-            ${escapeHTML(
-              record.iglesia
-            )}
-
-          </td>
-
-
-          <td>
-
-            ${
-              record.monto
-                ? "C$ " +
-                  escapeHTML(
-                    record.monto
-                  )
-                : ""
-            }
-
-          </td>
-
-
-          <td>
-
-            <div class="actions">
-
-              <button
-                onclick="openRecord('${encodeURIComponent(record.idRegistro)}')"
-              >
-                👁️ Ver
-              </button>
-
-
-              <button
-                class="secondary"
-                onclick="printOne('${encodeURIComponent(record.idRegistro)}')"
-              >
-                🖨️
-              </button>
-
-            </div>
-
-          </td>
-
-        `;
-
-
-        body.appendChild(
-          row
-        );
-
-      }
-    );
-
-  }
-
-
-  // =====================================================
-  // VER REGISTRO
-  // =====================================================
-
-  function openRecord(
-    encodedId
-  ) {
-
-    const id =
-      decodeURIComponent(
-        encodedId
-      );
-
-
-    window.location.href =
-      "imprimir.html?ids=" +
-      encodeURIComponent(
-        id
-      );
-
-  }
-
-
-  // =====================================================
-  // IMPRIMIR UNO
-  // =====================================================
-
-  function printOne(
-    encodedId
-  ) {
-
-    const id =
-      decodeURIComponent(
-        encodedId
-      );
-
-
-    window.open(
-
-      "imprimir.html?ids=" +
-      encodeURIComponent(
-        id
-      ),
-
-      "_blank"
-
-    );
-
-  }
-
-
-  // =====================================================
-  // SELECCIONAR TODOS
-  // =====================================================
-
-  document
-    .getElementById(
-      "selectAll"
-    )
-    .addEventListener(
-      "change",
-      function () {
-
-        document
-          .querySelectorAll(
-            ".record-check"
-          )
-          .forEach(
-            checkbox => {
-
-              checkbox.checked =
-                this.checked;
-
-            }
-          );
-
-      }
-    );
-
-
-  // =====================================================
-  // OBTENER SELECCIONADOS
-  // =====================================================
-
-  function getSelectedIds() {
-
-    return Array.from(
-
-      document.querySelectorAll(
-        ".record-check:checked"
-      )
-
-    ).map(
-      checkbox =>
-        checkbox.value
-    );
-
-  }
-
-
-  // =====================================================
-  // IMPRIMIR SELECCIONADOS
-  // =====================================================
-
-  function printSelected() {
-
-    const ids =
-      getSelectedIds();
-
-
-    if (
-      ids.length === 0
-    ) {
-
-      alert(
-        "⚠️ Selecciona al menos un registro."
-      );
-
-      return;
-
-    }
-
-
-    window.open(
-
-      "imprimir.html?ids=" +
-      encodeURIComponent(
-        ids.join(",")
-      ),
-
-      "_blank"
-
-    );
-
-  }
-
-
-  // =====================================================
-  // IMPRIMIR TODOS
-  // =====================================================
-
-  function printAll() {
-
-    if (
-      allRecords.length === 0
-    ) {
-
-      alert(
-        "⚠️ No hay registros para imprimir."
-      );
-
-      return;
-
-    }
-
-
-    const ids =
-      allRecords.map(
-        record =>
-          record.idRegistro
-      );
-
-
-    window.open(
-
-      "imprimir.html?ids=" +
-      encodeURIComponent(
-        ids.join(",")
-      ),
-
-      "_blank"
-
-    );
-
-  }
-
-
-  // =====================================================
-  // BÚSQUEDA
-  // =====================================================
-
-  document
-    .getElementById(
-      "search"
-    )
-    .addEventListener(
-      "input",
-      function () {
-
-        const text =
-          this.value
-            .toLowerCase()
-            .trim();
-
-
-        if (!text) {
-
-          renderRecords(
-            allRecords
-          );
-
-          return;
-
-        }
-
-
-        const filtered =
-          allRecords.filter(
-            record => {
-
-              const content = [
-
-                record.idRegistro,
-
-                record.fechaRegistro,
-
-                record.nombres,
-
-                record.apellidos,
-
-                record.edad,
-
-                record.telefono,
-
-                record.correo,
-
-                record.talla,
-
-                record.region,
-
-                record.distrito,
-
-                record.iglesia,
-
-                record.pastor,
-
-                record.cargo,
-
-                record.condicionMedica,
-
-                record.detalleMedico,
-
-                record.monto
-
-              ]
-
-                .join(" ")
-                .toLowerCase();
-
-
-              return content.includes(
-                text
-              );
-
-            }
-          );
-
-
-        renderRecords(
-          filtered
-        );
-
-      }
-    );
-
-
-  // =====================================================
-  // VOLVER
-  // =====================================================
-
-  function goBack() {
-
-    window.location.href =
-      "index.html";
-
-  }
-
-
-  // =====================================================
-  // INICIAR
-  // =====================================================
-
-  loadRecords();
-
+};
+render();
 </script>
-
-
 </body>
-
 </html>
