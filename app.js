@@ -1,459 +1,484 @@
-const form = document.getElementById('registrationForm');
-const sheet = document.querySelector('.sheet');
-const statusEl = document.getElementById('recordStatus');
+// =====================================================
+// VIGILIA NACIONAL PROCESOS 2026
+// APP.JS
+// =====================================================
 
-let currentRecordId = null;
+document.addEventListener("DOMContentLoaded", () => {
 
-/* =========================================================
-   SUPABASE
-   ========================================================= */
+  console.log("app.js cargado correctamente");
 
-function supabaseReady() {
-  return (
-    typeof window.supabaseClient !== 'undefined' &&
-    window.supabaseClient !== null
-  );
-}
+  // ---------------------------------------------------
+  // ELEMENTOS
+  // ---------------------------------------------------
 
-function setStatus(message, type = 'ok') {
-  if (!statusEl) return;
+  const form = document.getElementById("registroForm");
 
-  statusEl.textContent = message;
-  statusEl.className = 'record-status ' + type;
-}
+  const btnGuardar = document.getElementById("btnGuardar");
+  const btnVistaPrevia = document.getElementById("btnVistaPrevia");
+  const btnEditar = document.getElementById("btnEditar");
+  const btnImprimir = document.getElementById("btnImprimir");
+  const btnLimpiar = document.getElementById("btnLimpiar");
+  const btnRegistros = document.getElementById("btnRegistros");
 
-/* =========================================================
-   GENERAR ID
-   ========================================================= */
+  // ---------------------------------------------------
+  // COMPROBAR SUPABASE
+  // ---------------------------------------------------
 
-function makeId() {
-  return (
-    'REG-' +
-    Date.now().toString(36).toUpperCase() +
-    '-' +
-    Math.random().toString(36).slice(2, 7).toUpperCase()
-  );
-}
-
-/* =========================================================
-   CHECKBOX DE SELECCIÓN ÚNICA
-   ========================================================= */
-
-function enforceSingleCheckboxGroups() {
-  document.querySelectorAll('[data-single-group]').forEach(group => {
-    group.addEventListener('change', event => {
-      if (
-        event.target.type !== 'checkbox' ||
-        !event.target.checked
-      ) {
-        return;
-      }
-
-      group
-        .querySelectorAll('input[type="checkbox"]')
-        .forEach(box => {
-          if (box !== event.target) {
-            box.checked = false;
-          }
-        });
-    });
-  });
-}
-
-/* =========================================================
-   OBTENER CHECKBOX MARCADO
-   ========================================================= */
-
-function checked(name) {
-  const selected = form.querySelector(
-    `input[name="${name}"]:checked`
-  );
-
-  return selected ? selected.value : '';
-}
-
-/* =========================================================
-   RECOPILAR FORMULARIO
-   ========================================================= */
-
-function collectForm() {
-  const raw = Object.fromEntries(
-    new FormData(form).entries()
-  );
-
-  const now = new Date();
-
-  return {
-    idRegistro: currentRecordId || makeId(),
-
-    fechaRegistro: "06/09/2026",
-
-    nombres: raw.nombres || '',
-    apellidos: raw.apellidos || '',
-    edad: raw.edad || '',
-    telefono: raw.telefono || '',
-    correo: raw.correo || '',
-
-    talla: checked('talla'),
-
-    region: raw.region || '',
-    distrito: raw.distrito || '',
-    iglesia: raw.iglesia || '',
-    pastor: raw.pastor || '',
-
-    cargo: checked('cargo'),
-
-    condicionMedica: checked('condicionMedica'),
-    detalleMedico: raw.detalleMedico || '',
-
-    monto: raw.monto || '',
-    firmaLider: raw.firmaLider || '',
-
-    dia: raw.dia || '',
-    mes: raw.mes || '',
-    anio: '2026'
-  };
-}
-
-/* =========================================================
-   LLENAR FORMULARIO
-   ========================================================= */
-
-function fillForm(data) {
-  const fields = [
-    'nombres',
-    'apellidos',
-    'edad',
-    'telefono',
-    'correo',
-    'region',
-    'distrito',
-    'iglesia',
-    'pastor',
-    'detalleMedico',
-    'monto',
-    'firmaLider',
-    'dia',
-    'mes'
-  ];
-
-  fields.forEach(name => {
-    if (form.elements[name]) {
-      form.elements[name].value = data[name] ?? '';
-    }
-  });
-
-  [
-    'talla',
-    'cargo',
-    'condicionMedica'
-  ].forEach(name => {
-    form
-      .querySelectorAll(`input[name="${name}"]`)
-      .forEach(box => {
-        box.checked = box.value === (data[name] || '');
-      });
-  });
-}
-
-/* =========================================================
-   VALIDAR
-   ========================================================= */
-
-function validate() {
-  if (
-    !form.elements.nombres.value.trim() ||
-    !form.elements.apellidos.value.trim()
-  ) {
-    setStatus(
-      'Completa nombres y apellidos antes de guardar.',
-      'error'
-    );
-
-    return false;
-  }
-
-  return true;
-}
-
-/* =========================================================
-   GUARDAR EN SUPABASE
-   ========================================================= */
-
-async function saveRecord() {
-  if (!validate()) return;
-
-  if (!supabaseReady()) {
-    setStatus(
-      'Error: Supabase no está configurado correctamente.',
-      'error'
-    );
-
+  if (!window.supabaseClient) {
+    console.error("Supabase no está configurado.");
+    alert("Error: Supabase no está configurado correctamente.");
     return;
   }
 
-  const data = collectForm();
-  const wasEditing = Boolean(currentRecordId);
+  const supabase = window.supabaseClient;
 
-  setStatus(
-    'Guardando registro en la base de datos...',
-    'info'
+  // ---------------------------------------------------
+  // ESTADO
+  // ---------------------------------------------------
+
+  let currentRecordId = null;
+
+  // ---------------------------------------------------
+  // UTILIDADES
+  // ---------------------------------------------------
+
+  function makeId() {
+    const now = new Date();
+
+    return (
+      now.getFullYear().toString() +
+      (now.getMonth() + 1).toString().padStart(2, "0") +
+      now.getDate().toString().padStart(2, "0") +
+      "-" +
+      now.getHours().toString().padStart(2, "0") +
+      now.getMinutes().toString().padStart(2, "0") +
+      now.getSeconds().toString().padStart(2, "0")
+    );
+  }
+
+  function getValue(id) {
+    const element = document.getElementById(id);
+    return element ? element.value.trim() : "";
+  }
+
+  function setValue(id, value) {
+    const element = document.getElementById(id);
+
+    if (element) {
+      element.value = value ?? "";
+    }
+  }
+
+  function getChecked(id) {
+    const element = document.getElementById(id);
+    return element ? element.checked : false;
+  }
+
+  function setStatus(message) {
+    const status = document.getElementById("status");
+
+    if (status) {
+      status.textContent = message;
+    } else {
+      console.log(message);
+    }
+  }
+
+  // ---------------------------------------------------
+  // CHECKBOXES
+  // ---------------------------------------------------
+
+  const medicalCheckboxes = document.querySelectorAll(
+    'input[type="checkbox"][name="condicionMedica"]'
   );
 
-  try {
-    const { data: saved, error } =
-      await window.supabaseClient
-        .from('registros_vigilia')
-        .upsert(data, {
-          onConflict: 'idRegistro'
-        })
+  medicalCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+
+      if (checkbox.checked) {
+        medicalCheckboxes.forEach((other) => {
+          if (other !== checkbox) {
+            other.checked = false;
+          }
+        });
+      }
+
+    });
+  });
+
+  // ---------------------------------------------------
+  // RECOPILAR FORMULARIO
+  // ---------------------------------------------------
+
+  function collectForm() {
+
+    const now = new Date();
+
+    let condicionMedica = "";
+
+    const checkedMedical = document.querySelector(
+      'input[type="checkbox"][name="condicionMedica"]:checked'
+    );
+
+    if (checkedMedical) {
+      condicionMedica = checkedMedical.value;
+    }
+
+    return {
+
+      idRegistro: currentRecordId || makeId(),
+
+      fechaRegistro:
+        `${now.getDate()}/` +
+        `${now.getMonth() + 1}/` +
+        `${now.getFullYear()}`,
+
+      nombres: getValue("nombres"),
+
+      apellidos: getValue("apellidos"),
+
+      edad: getValue("edad"),
+
+      telefono: getValue("telefono"),
+
+      correo: getValue("correo"),
+
+      talla: getValue("talla"),
+
+      region: getValue("region"),
+
+      distrito: getValue("distrito"),
+
+      iglesia: getValue("iglesia"),
+
+      pastor: getValue("pastor"),
+
+      cargo: getValue("cargo"),
+
+      condicionMedica: condicionMedica,
+
+      detalleMedico: getValue("detalleMedico"),
+
+      monto: getValue("monto"),
+
+      firmaLider: getValue("firmaLider"),
+
+      dia: getValue("dia"),
+
+      mes: getValue("mes"),
+
+      anio: getValue("anio")
+    };
+  }
+
+  // ---------------------------------------------------
+  // GUARDAR
+  // ---------------------------------------------------
+
+  async function saveRecord() {
+
+    try {
+
+      setStatus("Guardando...");
+
+      const data = collectForm();
+
+      console.log("Datos que se enviarán:", data);
+
+      const { data: result, error } = await supabase
+        .from("registros_vigilia")
+        .upsert(
+          data,
+          {
+            onConflict: "idRegistro"
+          }
+        )
         .select()
         .single();
 
-    if (error) {
-      console.error('SUPABASE ERROR:', error);
+      if (error) {
 
-      setStatus(
-        'Error al guardar: ' + error.message,
-        'error'
+        console.error("Error de Supabase:", error);
+
+        alert(
+          "No se pudo guardar el registro:\n\n" +
+          error.message
+        );
+
+        setStatus("Error al guardar");
+
+        return;
+      }
+
+      currentRecordId = result.idRegistro;
+
+      console.log("Registro guardado:", result);
+
+      setStatus("Registro guardado correctamente");
+
+      alert("✅ Registro guardado correctamente.");
+
+    } catch (error) {
+
+      console.error("Error inesperado:", error);
+
+      alert(
+        "Error inesperado:\n\n" +
+        error.message
       );
 
-      return;
-    }
+      setStatus("Error");
 
-    if (!saved) {
-      setStatus(
-        'El registro fue procesado, pero Supabase no devolvió los datos.',
-        'error'
+    }
+  }
+
+  // ---------------------------------------------------
+  // VISTA PREVIA
+  // ---------------------------------------------------
+
+  function previewRecord() {
+
+    try {
+
+      const data = collectForm();
+
+      localStorage.setItem(
+        "vigiliaPreview",
+        JSON.stringify(data)
       );
 
-      return;
+      window.open(
+        "imprimir.html?preview=1",
+        "_blank"
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "No se pudo generar la vista previa."
+      );
+
     }
-
-    currentRecordId = saved.idRegistro;
-
-    history.replaceState(
-      {},
-      '',
-      `index.html?id=${encodeURIComponent(saved.idRegistro)}`
-    );
-
-    setStatus(
-      wasEditing
-        ? `Registro ${saved.idRegistro} actualizado correctamente.`
-        : `Registro guardado correctamente: ${saved.idRegistro}`,
-      'ok'
-    );
-
-    alert(
-      wasEditing
-        ? 'Registro actualizado correctamente.\n\nID: ' +
-          saved.idRegistro
-        : 'Registro guardado correctamente.\n\nID: ' +
-          saved.idRegistro
-    );
-
-  } catch (error) {
-    console.error('ERROR:', error);
-
-    setStatus(
-      'Ocurrió un error inesperado al guardar.',
-      'error'
-    );
-  }
-}
-
-/* =========================================================
-   NUEVA FICHA
-   ========================================================= */
-
-function newForm() {
-  currentRecordId = null;
-
-  if (form) {
-    form.reset();
   }
 
-  if (sheet) {
-    sheet.classList.remove('preview-mode');
-  }
+  // ---------------------------------------------------
+  // EDITAR
+  // ---------------------------------------------------
 
-  setStatus(
-    'Nueva ficha lista para llenar.',
-    'info'
-  );
+  function editRecord() {
 
-  history.replaceState(
-    {},
-    '',
-    'index.html'
-  );
-}
-
-/* =========================================================
-   CARGAR REGISTRO
-   ========================================================= */
-
-async function loadRecord(id) {
-  if (!supabaseReady()) {
-    setStatus(
-      'Error: Supabase no está configurado correctamente.',
-      'error'
+    const id = prompt(
+      "Escribe el ID del registro que deseas editar:"
     );
 
-    return;
+    if (!id) return;
+
+    loadRecord(id);
   }
 
-  setStatus(
-    'Cargando registro...',
-    'info'
-  );
+  // ---------------------------------------------------
+  // CARGAR REGISTRO
+  // ---------------------------------------------------
 
-  try {
-    const { data, error } =
-      await window.supabaseClient
-        .from('registros_vigilia')
-        .select('*')
-        .eq('idRegistro', id)
+  async function loadRecord(id) {
+
+    try {
+
+      setStatus("Cargando registro...");
+
+      const { data, error } = await supabase
+        .from("registros_vigilia")
+        .select("*")
+        .eq("idRegistro", id)
         .single();
 
-    if (error) {
-      console.error('SUPABASE ERROR:', error);
+      if (error) {
+
+        console.error(error);
+
+        alert(
+          "No se encontró el registro:\n\n" +
+          error.message
+        );
+
+        return;
+      }
+
+      currentRecordId = data.idRegistro;
+
+      setValue("nombres", data.nombres);
+      setValue("apellidos", data.apellidos);
+      setValue("edad", data.edad);
+      setValue("telefono", data.telefono);
+      setValue("correo", data.correo);
+      setValue("talla", data.talla);
+      setValue("region", data.region);
+      setValue("distrito", data.distrito);
+      setValue("iglesia", data.iglesia);
+      setValue("pastor", data.pastor);
+      setValue("cargo", data.cargo);
+      setValue("detalleMedico", data.detalleMedico);
+      setValue("monto", data.monto);
+      setValue("firmaLider", data.firmaLider);
+      setValue("dia", data.dia);
+      setValue("mes", data.mes);
+      setValue("anio", data.anio);
+
+      document
+        .querySelectorAll(
+          'input[type="checkbox"][name="condicionMedica"]'
+        )
+        .forEach((checkbox) => {
+
+          checkbox.checked =
+            checkbox.value === data.condicionMedica;
+
+        });
 
       setStatus(
-        'No se encontró ese registro.',
-        'error'
+        "Editando registro " +
+        data.idRegistro
       );
 
-      return;
-    }
+    } catch (error) {
 
-    if (!data) {
-      setStatus(
-        'No se encontró ese registro.',
-        'error'
+      console.error(error);
+
+      alert(
+        "Error cargando registro:\n\n" +
+        error.message
       );
 
-      return;
     }
-
-    currentRecordId = data.idRegistro;
-
-    fillForm(data);
-
-    if (sheet) {
-      sheet.classList.add('preview-mode');
-    }
-
-    setStatus(
-      `Registro ${id} cargado. Puedes editarlo o imprimirlo.`,
-      'info'
-    );
-
-  } catch (error) {
-    console.error('ERROR:', error);
-
-    setStatus(
-      'Error al cargar el registro.',
-      'error'
-    );
   }
-}
 
-/* =========================================================
-   BOTONES
-   ========================================================= */
+  // ---------------------------------------------------
+  // IMPRIMIR
+  // ---------------------------------------------------
 
-const btnPreview =
-  document.getElementById('btnPreview');
+  function printRecord() {
 
-if (btnPreview) {
-  btnPreview.onclick = () => {
-    if (sheet) {
-      sheet.classList.add('preview-mode');
+    const id =
+      currentRecordId ||
+      getValue("idRegistro");
+
+    if (id) {
+
+      window.open(
+        "imprimir.html?ids=" +
+        encodeURIComponent(id),
+        "_blank"
+      );
+
+    } else {
+
+      alert(
+        "Primero guarda el registro."
+      );
+
+    }
+  }
+
+  // ---------------------------------------------------
+  // LIMPIAR
+  // ---------------------------------------------------
+
+  function clearForm() {
+
+    if (form) {
+      form.reset();
     }
 
-    setStatus(
-      'Vista previa activada.',
-      'info'
-    );
-  };
-}
+    currentRecordId = null;
 
-const btnEdit =
-  document.getElementById('btnEdit');
+    setStatus("Formulario limpio");
 
-if (btnEdit) {
-  btnEdit.onclick = () => {
-    if (sheet) {
-      sheet.classList.remove('preview-mode');
-    }
-
-    setStatus(
-      'Modo edición activado.',
-      'info'
-    );
-  };
-}
-
-const btnPrint =
-  document.getElementById('btnPrint');
-
-if (btnPrint) {
-  btnPrint.onclick = () => {
-    window.print();
-  };
-}
-
-const btnSave =
-  document.getElementById('btnSave');
-
-if (btnSave) {
-  btnSave.onclick = saveRecord;
-}
-
-const btnClear =
-  document.getElementById('btnClear');
-
-if (btnClear) {
-  btnClear.onclick = () => {
-    if (
-      confirm(
-        '¿Crear una nueva ficha? Los registros ya guardados no se borrarán.'
+    document
+      .querySelectorAll(
+        'input[type="checkbox"][name="condicionMedica"]'
       )
-    ) {
-      newForm();
-    }
-  };
-}
+      .forEach((checkbox) => {
+        checkbox.checked = false;
+      });
 
-const btnRecords =
-  document.getElementById('btnRecords');
+  }
 
-if (btnRecords) {
-  btnRecords.onclick = () => {
-    location.href = 'registros.html';
-  };
-}
+  // ---------------------------------------------------
+  // EVENTOS
+  // ---------------------------------------------------
 
-/* =========================================================
-   INICIO
-   ========================================================= */
+  if (form) {
 
-if (form) {
-  enforceSingleCheckboxGroups();
+    form.addEventListener(
+      "submit",
+      (event) => {
 
-  const params =
-    new URLSearchParams(location.search);
+        event.preventDefault();
 
-  const id = params.get('id');
+        saveRecord();
 
-  if (id) {
-    loadRecord(id);
-  } else {
-    setStatus(
-      'Nueva ficha. Los registros se guardarán en la base de datos.',
-      'info'
+      }
+    );
+
+  }
+
+  if (btnGuardar) {
+    btnGuardar.addEventListener(
+      "click",
+      saveRecord
     );
   }
-}
+
+  if (btnVistaPrevia) {
+    btnVistaPrevia.addEventListener(
+      "click",
+      previewRecord
+    );
+  }
+
+  if (btnEditar) {
+    btnEditar.addEventListener(
+      "click",
+      editRecord
+    );
+  }
+
+  if (btnImprimir) {
+    btnImprimir.addEventListener(
+      "click",
+      printRecord
+    );
+  }
+
+  if (btnLimpiar) {
+    btnLimpiar.addEventListener(
+      "click",
+      clearForm
+    );
+  }
+
+  if (btnRegistros) {
+
+    btnRegistros.addEventListener(
+      "click",
+      () => {
+
+        window.location.href =
+          "registros.html";
+
+      }
+    );
+
+  }
+
+  // ---------------------------------------------------
+  // INICIO
+  // ---------------------------------------------------
+
+  console.log(
+    "✅ Sistema de Vigilia iniciado correctamente"
+  );
+
+});
