@@ -86,7 +86,7 @@ function collectForm() {
   return {
     idRegistro: currentRecordId || makeId(),
 
-    fechaRegistro: `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}
+    fechaRegistro: "06/09/2026",
 
     nombres: raw.nombres || '',
     apellidos: raw.apellidos || '',
