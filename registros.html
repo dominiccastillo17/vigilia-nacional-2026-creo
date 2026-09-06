@@ -1,701 +1,641 @@
 <!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Registros - Vigilia Nacional Procesos 2026</title>
+<html lang="es">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1"
+>
+
+<title>
+Registros - Vigilia Nacional Procesos 2026
+</title>
 
 <style>
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  padding: 20px;
-  background: #eef1f5;
-  color: #26364d;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  color: #111827;
 }
 
-.container {
-  max-width: 1400px;
-  margin: auto;
-}
-
-.header {
-  background: #173d8e;
+header {
+  background: #111827;
   color: white;
-  border-radius: 14px;
-  padding: 20px;
-  margin-bottom: 18px;
+  padding: 18px;
 }
 
-.header h1 {
-  margin: 0 0 5px;
-  font-size: 25px;
-}
-
-.header p {
+header h1 {
   margin: 0;
-  opacity: .9;
+  font-size: 20px;
 }
 
-.controls {
+header p {
+  margin: 5px 0 0;
+  font-size: 12px;
+}
+
+.toolbar {
   background: white;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 18px rgba(0,0,0,.08);
-}
-
-.search {
-  width: 100%;
-  padding: 11px;
-  border: 1px solid #c8d2df;
-  border-radius: 8px;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-.buttons {
+  padding: 12px;
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
 }
 
 button {
   border: 0;
-  border-radius: 8px;
-  padding: 10px 13px;
-  background: #173d8e;
-  color: white;
-  font-weight: 700;
+  border-radius: 7px;
+  padding: 9px 13px;
   cursor: pointer;
+  font-weight: bold;
+  background: #2563eb;
+  color: white;
 }
 
 button.secondary {
-  background: #e8edf6;
-  color: #24364e;
+  background: #4b5563;
 }
 
 button.danger {
-  background: #8f2d2d;
+  background: #dc2626;
 }
 
-button:disabled {
-  opacity: .5;
-  cursor: not-allowed;
+input[type="search"] {
+  flex: 1;
+  min-width: 220px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  padding: 9px;
 }
 
-.status {
-  margin-top: 10px;
-  font-weight: 700;
-  font-size: 13px;
+main {
+  padding: 15px;
 }
 
 .table-wrap {
   background: white;
-  border-radius: 12px;
-  overflow: auto;
-  box-shadow: 0 4px 18px rgba(0,0,0,.08);
+  border-radius: 10px;
+  overflow-x: auto;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1100px;
+  min-width: 950px;
 }
 
 th,
 td {
-  padding: 10px;
-  border-bottom: 1px solid #e1e6ed;
+  padding: 9px;
+  border-bottom: 1px solid #e5e7eb;
   text-align: left;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 th {
-  background: #f4f7fb;
-  color: #173d8e;
+  background: #e5e7eb;
 }
 
 tr:hover {
-  background: #fafcff;
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.small-btn {
-  padding: 6px 8px;
-  font-size: 11px;
-}
-
-.back {
-  margin-bottom: 15px;
+  background: #f9fafb;
 }
 
 .empty {
   padding: 30px;
   text-align: center;
-  color: #66778d;
+  color: #6b7280;
 }
+
+.actions {
+  display: flex;
+  gap: 5px;
+}
+
+.small {
+  padding: 5px 8px;
+  font-size: 11px;
+}
+
+.status {
+  padding: 10px 15px;
+  font-size: 12px;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<div class="container">
+<header>
 
-  <div class="back">
-    <button class="secondary" onclick="location.href='index.html'">
-      ← Volver a la ficha
-    </button>
-  </div>
+<h1>
+📋 Registros — Vigilia Nacional Procesos 2026
+</h1>
 
-  <div class="header">
-    <h1>📋 Registros de Vigilia Nacional Procesos 2026</h1>
-    <p>Base de datos compartida de inscripciones</p>
-  </div>
+<p>
+Registros compartidos almacenados en Supabase
+</p>
 
-  <div class="controls">
+</header>
 
-    <input
-      id="search"
-      class="search"
-      type="search"
-      placeholder="Buscar por nombre, teléfono, iglesia, distrito, región o ID..."
-    >
 
-    <div class="buttons">
+<div class="toolbar">
 
-      <button id="selectAll">
-        ☑️ Seleccionar todos
-      </button>
+<input
+  id="search"
+  type="search"
+  placeholder="Buscar por nombre, iglesia, teléfono..."
+>
 
-      <button id="clearSelection" class="secondary">
-        Limpiar selección
-      </button>
+<button id="btnRefresh">
+  🔄 Actualizar
+</button>
 
-      <button id="printSelected">
-        🖨️ Imprimir seleccionados
-      </button>
+<button id="btnSelectAll" class="secondary">
+  ☑️ Seleccionar todos
+</button>
 
-      <button id="printAll">
-        📄 Imprimir todos
-      </button>
+<button id="btnClearSelection" class="secondary">
+  Deseleccionar
+</button>
 
-      <button id="refresh" class="secondary">
-        🔄 Actualizar
-      </button>
+<button id="btnPrintSelected">
+  🖨️ Imprimir seleccionados
+</button>
 
-      <button id="deleteSelected" class="danger">
-        🗑️ Eliminar seleccionados
-      </button>
+<button id="btnPrintAll">
+  🖨️ Imprimir todos
+</button>
 
-      <button id="deleteAll" class="danger">
-        ⚠️ Eliminar todos
-      </button>
-
-    </div>
-
-    <div id="status" class="status">
-      Cargando registros...
-    </div>
-
-  </div>
-
-  <div class="table-wrap">
-
-    <table>
-
-      <thead>
-        <tr>
-          <th>
-            <input type="checkbox" id="masterCheck">
-          </th>
-          <th>ID</th>
-          <th>Fecha</th>
-          <th>Nombre completo</th>
-          <th>Edad</th>
-          <th>Teléfono</th>
-          <th>Talla</th>
-          <th>Región</th>
-          <th>Distrito</th>
-          <th>Iglesia</th>
-          <th>Cargo</th>
-          <th>Condición médica</th>
-          <th>Monto</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-
-      <tbody id="recordsBody"></tbody>
-
-    </table>
-
-    <div id="empty" class="empty" style="display:none;">
-      No hay registros para mostrar.
-    </div>
-
-  </div>
+<button
+  id="btnBack"
+  class="secondary"
+>
+  ← Volver
+</button>
 
 </div>
 
+
+<div
+  id="status"
+  class="status"
+>
+  Cargando registros...
+</div>
+
+
+<main>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th></th>
+
+<th>ID</th>
+
+<th>Fecha</th>
+
+<th>Nombres</th>
+
+<th>Apellidos</th>
+
+<th>Teléfono</th>
+
+<th>Talla</th>
+
+<th>Región</th>
+
+<th>Distrito</th>
+
+<th>Iglesia</th>
+
+<th>Pago</th>
+
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tbody">
+
+</tbody>
+
+</table>
+
+<div
+  id="empty"
+  class="empty"
+  style="display:none"
+>
+  No hay registros.
+</div>
+
+</div>
+
+</main>
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="supabase-config.js"></script>
 
 <script>
-const body = document.getElementById('recordsBody');
-const empty = document.getElementById('empty');
-const status = document.getElementById('status');
-const search = document.getElementById('search');
-const masterCheck = document.getElementById('masterCheck');
+
+const supabase =
+  window.supabaseClient;
 
 let records = [];
 
-function ready() {
-  return (
-    typeof window.supabaseClient !== 'undefined' &&
-    window.supabaseClient !== null
-  );
+
+const tbody =
+  document.getElementById("tbody");
+
+const empty =
+  document.getElementById("empty");
+
+const status =
+  document.getElementById("status");
+
+const search =
+  document.getElementById("search");
+
+
+function esc(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) return "";
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
 }
 
-function setStatus(text, type = '') {
-  status.textContent = text;
-  status.style.color =
-    type === 'error' ? '#9a2727' : '#26364d';
-}
-
-function escapeHtml(value) {
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function selectedIds() {
-  return [
-    ...document.querySelectorAll(
-      '.record-check:checked'
-    )
-  ].map(input => input.value);
-}
 
 function render() {
-  const term =
-    search.value.trim().toLowerCase();
 
-  const filtered = records.filter(record => {
+  const query =
+    search.value
+      .toLowerCase()
+      .trim();
 
-    const text = [
-      record.idRegistro,
-      record.fechaRegistro,
-      record.nombres,
-      record.apellidos,
-      record.telefono,
-      record.talla,
-      record.region,
-      record.distrito,
-      record.iglesia,
-      record.pastor,
-      record.cargo,
-      record.condicionMedica
-    ]
-      .join(' ')
-      .toLowerCase();
 
-    return text.includes(term);
-  });
+  const filtered =
+    records.filter(r => {
 
-  body.innerHTML = '';
+      const text =
+        [
+          r.idRegistro,
+          r.nombres,
+          r.apellidos,
+          r.telefono,
+          r.iglesia,
+          r.region,
+          r.distrito
+        ]
+        .join(" ")
+        .toLowerCase();
 
-  if (!filtered.length) {
-    empty.style.display = 'block';
-    masterCheck.checked = false;
-    return;
-  }
+      return text.includes(query);
 
-  empty.style.display = 'none';
+    });
 
-  filtered.forEach(record => {
 
-    const tr = document.createElement('tr');
+  tbody.innerHTML = "";
+
+  empty.style.display =
+    filtered.length
+      ? "none"
+      : "block";
+
+
+  filtered.forEach(r => {
+
+    const tr =
+      document.createElement("tr");
 
     tr.innerHTML = `
+
       <td>
         <input
           type="checkbox"
           class="record-check"
-          value="${escapeHtml(record.idRegistro)}"
+          value="${esc(r.idRegistro)}"
         >
       </td>
 
-      <td>${escapeHtml(record.idRegistro)}</td>
-
-      <td>${escapeHtml(record.fechaRegistro)}</td>
-
       <td>
-        <strong>
-          ${escapeHtml(record.nombres)}
-          ${escapeHtml(record.apellidos)}
-        </strong>
-      </td>
-
-      <td>${escapeHtml(record.edad)}</td>
-
-      <td>${escapeHtml(record.telefono)}</td>
-
-      <td>${escapeHtml(record.talla)}</td>
-
-      <td>${escapeHtml(record.region)}</td>
-
-      <td>${escapeHtml(record.distrito)}</td>
-
-      <td>${escapeHtml(record.iglesia)}</td>
-
-      <td>${escapeHtml(record.cargo)}</td>
-
-      <td>
-        ${escapeHtml(record.condicionMedica)}
-        ${record.detalleMedico
-          ? '<br>' + escapeHtml(record.detalleMedico)
-          : ''}
+        ${esc(r.idRegistro)}
       </td>
 
       <td>
-        ${record.monto
-          ? 'C$ ' + escapeHtml(record.monto)
-          : ''}
+        ${esc(r.fechaRegistro)}
       </td>
 
       <td>
+        ${esc(r.nombres)}
+      </td>
+
+      <td>
+        ${esc(r.apellidos)}
+      </td>
+
+      <td>
+        ${esc(r.telefono)}
+      </td>
+
+      <td>
+        ${esc(r.talla)}
+      </td>
+
+      <td>
+        ${esc(r.region)}
+      </td>
+
+      <td>
+        ${esc(r.distrito)}
+      </td>
+
+      <td>
+        ${esc(r.iglesia)}
+      </td>
+
+      <td>
+        C$ ${esc(r.monto)}
+      </td>
+
+      <td>
+
         <div class="actions">
 
           <button
-            class="small-btn"
-            onclick="openRecord('${encodeURIComponent(record.idRegistro)}')"
+            class="small"
+            onclick="openRecord('${esc(r.idRegistro)}')"
           >
             Abrir
           </button>
 
           <button
-            class="small-btn secondary"
-            onclick="printOne('${encodeURIComponent(record.idRegistro)}')"
+            class="small"
+            onclick="printOne('${esc(r.idRegistro)}')"
           >
-            Imprimir
-          </button>
-
-          <button
-            class="small-btn danger"
-            onclick="deleteOne('${encodeURIComponent(record.idRegistro)}')"
-          >
-            Eliminar
+            🖨️
           </button>
 
         </div>
+
       </td>
+
     `;
 
-    body.appendChild(tr);
+    tbody.appendChild(tr);
+
   });
+
 }
+
 
 async function loadRecords() {
 
-  if (!ready()) {
-    setStatus(
-      'Supabase no está configurado correctamente.',
-      'error'
-    );
+  status.textContent =
+    "Cargando...";
+
+  const {
+    data,
+    error
+  } =
+    await supabase
+      .from("registros_vigilia")
+      .select("*");
+
+
+  if (error) {
+
+    console.error(error);
+
+    status.textContent =
+      "❌ " + error.message;
+
     return;
+
   }
 
-  setStatus('Cargando registros...');
 
-  try {
+  records =
+    data || [];
 
-    const { data, error } =
-      await window.supabaseClient
-        .from('registros_vigilia')
-        .select('*');
 
-    if (error) {
-      console.error(error);
+  records.sort(
+    (a,b) =>
+      String(b.idRegistro)
+        .localeCompare(
+          String(a.idRegistro)
+        )
+  );
 
-      setStatus(
-        'Error al cargar: ' + error.message,
-        'error'
+
+  status.textContent =
+    `${records.length} registro(s) encontrado(s).`;
+
+  render();
+
+}
+
+
+function getSelected() {
+
+  return [
+    ...document.querySelectorAll(
+      ".record-check:checked"
+    )
+  ].map(
+    checkbox =>
+      checkbox.value
+  );
+
+}
+
+
+window.openRecord =
+  function(id) {
+
+    window.location.href =
+      "imprimir.html?ids=" +
+      encodeURIComponent(id);
+
+  };
+
+
+window.printOne =
+  function(id) {
+
+    window.open(
+      "imprimir.html?ids=" +
+      encodeURIComponent(id),
+      "_blank"
+    );
+
+  };
+
+
+document
+  .getElementById("btnRefresh")
+  .addEventListener(
+    "click",
+    loadRecords
+  );
+
+
+document
+  .getElementById("btnBack")
+  .addEventListener(
+    "click",
+    () => {
+      window.location.href =
+        "index.html";
+    }
+  );
+
+
+document
+  .getElementById("btnSelectAll")
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .querySelectorAll(
+          ".record-check"
+        )
+        .forEach(
+          checkbox =>
+            checkbox.checked = true
+        );
+
+    }
+  );
+
+
+document
+  .getElementById("btnClearSelection")
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .querySelectorAll(
+          ".record-check"
+        )
+        .forEach(
+          checkbox =>
+            checkbox.checked = false
+        );
+
+    }
+  );
+
+
+document
+  .getElementById("btnPrintSelected")
+  .addEventListener(
+    "click",
+    () => {
+
+      const ids =
+        getSelected();
+
+      if (!ids.length) {
+
+        alert(
+          "Selecciona al menos un registro."
+        );
+
+        return;
+
+      }
+
+      window.open(
+        "imprimir.html?ids=" +
+        ids
+          .map(encodeURIComponent)
+          .join(","),
+        "_blank"
       );
 
-      return;
     }
+  );
 
-    records = data || [];
 
-    records.sort((a, b) => {
-      const idA = String(a.idRegistro || '');
-      const idB = String(b.idRegistro || '');
+document
+  .getElementById("btnPrintAll")
+  .addEventListener(
+    "click",
+    () => {
 
-      return idB.localeCompare(idA);
-    });
+      if (!records.length) {
 
-    render();
+        alert(
+          "No hay registros."
+        );
 
-    setStatus(
-      `${records.length} registro(s) encontrado(s).`
-    );
+        return;
 
-  } catch (error) {
+      }
 
-    console.error(error);
+      window.open(
+        "imprimir.html?ids=" +
+        records
+          .map(r =>
+            encodeURIComponent(
+              r.idRegistro
+            )
+          )
+          .join(","),
+        "_blank"
+      );
 
-    setStatus(
-      'Ocurrió un error al cargar los registros.',
-      'error'
-    );
-  }
-}
+    }
+  );
 
-function openRecord(id) {
-  location.href =
-    'index.html?id=' +
-    encodeURIComponent(
-      decodeURIComponent(id)
-    );
-}
-
-function printOne(id) {
-
-  const decoded =
-    decodeURIComponent(id);
-
-  location.href =
-    'imprimir.html?ids=' +
-    encodeURIComponent(decoded);
-}
-
-function printSelected() {
-
-  const ids = selectedIds();
-
-  if (!ids.length) {
-    alert('Selecciona al menos un registro.');
-    return;
-  }
-
-  location.href =
-    'imprimir.html?ids=' +
-    ids.map(id => encodeURIComponent(id)).join(',');
-}
-
-function printAll() {
-
-  if (!records.length) {
-    alert('No hay registros para imprimir.');
-    return;
-  }
-
-  location.href = 'imprimir.html';
-}
-
-function selectAll() {
-
-  document
-    .querySelectorAll('.record-check')
-    .forEach(check => {
-      check.checked = true;
-    });
-
-  masterCheck.checked = true;
-}
-
-function clearSelection() {
-
-  document
-    .querySelectorAll('.record-check')
-    .forEach(check => {
-      check.checked = false;
-    });
-
-  masterCheck.checked = false;
-}
-
-async function deleteOne(id) {
-
-  const decoded =
-    decodeURIComponent(id);
-
-  const record =
-    records.find(
-      item => item.idRegistro === decoded
-    );
-
-  const name =
-    record
-      ? `${record.nombres} ${record.apellidos}`
-      : decoded;
-
-  if (
-    !confirm(
-      `¿Eliminar el registro de ${name}?\n\nEsta acción no se puede deshacer.`
-    )
-  ) {
-    return;
-  }
-
-  const { error } =
-    await window.supabaseClient
-      .from('registros_vigilia')
-      .delete()
-      .eq('idRegistro', decoded);
-
-  if (error) {
-
-    console.error(error);
-
-    alert(
-      'Error al eliminar: ' +
-      error.message
-    );
-
-    return;
-  }
-
-  await loadRecords();
-}
-
-async function deleteSelected() {
-
-  const ids = selectedIds();
-
-  if (!ids.length) {
-    alert('Selecciona al menos un registro.');
-    return;
-  }
-
-  if (
-    !confirm(
-      `¿Eliminar ${ids.length} registro(s)?\n\nEsta acción no se puede deshacer.`
-    )
-  ) {
-    return;
-  }
-
-  const { error } =
-    await window.supabaseClient
-      .from('registros_vigilia')
-      .delete()
-      .in('idRegistro', ids);
-
-  if (error) {
-
-    console.error(error);
-
-    alert(
-      'Error al eliminar: ' +
-      error.message
-    );
-
-    return;
-  }
-
-  await loadRecords();
-}
-
-async function deleteAll() {
-
-  if (!records.length) {
-    alert('No hay registros para eliminar.');
-    return;
-  }
-
-  const confirmation =
-    prompt(
-      `ESTÁS A PUNTO DE ELIMINAR TODOS LOS REGISTROS (${records.length}).\n\nEscribe BORRAR para confirmar.`
-    );
-
-  if (confirmation !== 'BORRAR') {
-    return;
-  }
-
-  const { error } =
-    await window.supabaseClient
-      .from('registros_vigilia')
-      .delete()
-      .neq('idRegistro', '');
-
-  if (error) {
-
-    console.error(error);
-
-    alert(
-      'Error al eliminar: ' +
-      error.message
-    );
-
-    return;
-  }
-
-  await loadRecords();
-}
 
 search.addEventListener(
-  'input',
+  "input",
   render
 );
 
-masterCheck.addEventListener(
-  'change',
-  () => {
-
-    document
-      .querySelectorAll('.record-check')
-      .forEach(check => {
-        check.checked =
-          masterCheck.checked;
-      });
-
-  }
-);
-
-document.getElementById(
-  'selectAll'
-).onclick = selectAll;
-
-document.getElementById(
-  'clearSelection'
-).onclick = clearSelection;
-
-document.getElementById(
-  'printSelected'
-).onclick = printSelected;
-
-document.getElementById(
-  'printAll'
-).onclick = printAll;
-
-document.getElementById(
-  'refresh'
-).onclick = loadRecords;
-
-document.getElementById(
-  'deleteSelected'
-).onclick = deleteSelected;
-
-document.getElementById(
-  'deleteAll'
-).onclick = deleteAll;
 
 loadRecords();
+
 </script>
 
 </body>
+
 </html>
