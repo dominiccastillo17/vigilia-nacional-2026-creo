@@ -3,121 +3,780 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Registros - Vigilia Nacional Procesos 2026</title>
+
 <link rel="stylesheet" href="styles.css">
+
 <style>
-body{background:#eef1f5}
-.records-page{max-width:1200px;margin:28px auto;padding:0 20px;font-family:Arial,Helvetica,sans-serif}
-.records-head{background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.1);margin-bottom:18px}
-.records-head h1{color:#173d8e;margin:0 0 6px}.records-head p{margin:0;color:#53647a}
-.records-tools{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}
-.records-tools button{border:0;border-radius:8px;padding:10px 14px;background:#173d8e;color:#fff;font-weight:700;cursor:pointer}
-.records-tools button.secondary{background:#e8edf6;color:#24364e}
-.records-tools button.danger{background:#8f2d2d}
-#search{flex:1;min-width:260px;padding:10px;border:1px solid #bcc8d8;border-radius:7px}
-#summary{margin-top:12px;font-size:13px;font-weight:700;color:#53647a}
-.record-list{display:grid;gap:12px}
-.record-card{background:#fff;border:1px solid #d9e0ea;border-radius:10px;padding:15px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-.record-card strong{color:#173d8e;font-size:17px}
-.record-meta{color:#65758a;font-size:12px;margin-top:5px}
-.record-actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
-.record-actions button{border:0;border-radius:7px;padding:8px 12px;background:#173d8e;color:#fff;font-weight:700;cursor:pointer}
-.record-actions button.secondary{background:#e8edf6;color:#24364e}
-.record-actions button.danger{background:#8f2d2d}
-.select-row{display:flex;align-items:center;gap:10px;margin-top:10px}
-.select-row input{width:18px;height:18px}
-.empty{background:#fff;padding:30px;text-align:center;border-radius:10px;color:#66778d}
-.top-check{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#24364e}
-@media print{.no-print{display:none!important}}
+body{
+  background:#eef1f5;
+}
+
+.records-page{
+  max-width:1200px;
+  margin:28px auto;
+  padding:0 20px;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.records-head{
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 4px 20px rgba(0,0,0,.1);
+  margin-bottom:18px;
+}
+
+.records-head h1{
+  color:#173d8e;
+  margin:0 0 6px;
+}
+
+.records-head p{
+  margin:0;
+  color:#53647a;
+}
+
+.records-tools{
+  display:flex;
+  gap:9px;
+  margin-top:15px;
+  flex-wrap:wrap;
+}
+
+.records-tools button{
+  border:0;
+  border-radius:8px;
+  padding:10px 14px;
+  background:#173d8e;
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.records-tools button.secondary{
+  background:#e8edf6;
+  color:#24364e;
+}
+
+.records-tools button.danger{
+  background:#8f2d2d;
+}
+
+#search{
+  flex:1;
+  min-width:260px;
+  padding:10px;
+  border:1px solid #bcc8d8;
+  border-radius:7px;
+}
+
+#summary{
+  margin-top:12px;
+  font-size:13px;
+  font-weight:700;
+  color:#53647a;
+}
+
+.record-list{
+  display:grid;
+  gap:12px;
+}
+
+.record-card{
+  background:#fff;
+  border:1px solid #d9e0ea;
+  border-radius:10px;
+  padding:15px;
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
+}
+
+.record-card strong{
+  color:#173d8e;
+  font-size:17px;
+}
+
+.record-meta{
+  color:#65758a;
+  font-size:12px;
+  margin-top:5px;
+}
+
+.record-actions{
+  margin-top:12px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.record-actions button{
+  border:0;
+  border-radius:7px;
+  padding:8px 12px;
+  background:#173d8e;
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.record-actions button.secondary{
+  background:#e8edf6;
+  color:#24364e;
+}
+
+.record-actions button.danger{
+  background:#8f2d2d;
+}
+
+.select-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:10px;
+}
+
+.select-row input{
+  width:18px;
+  height:18px;
+}
+
+.empty{
+  background:#fff;
+  padding:30px;
+  text-align:center;
+  border-radius:10px;
+  color:#66778d;
+}
+
+.top-check{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  font-weight:700;
+  color:#24364e;
+}
+
+.loading{
+  background:#fff;
+  padding:30px;
+  text-align:center;
+  border-radius:10px;
+  color:#53647a;
+  font-weight:700;
+}
+
+.error-box{
+  background:#fff;
+  padding:30px;
+  text-align:center;
+  border-radius:10px;
+  color:#9a2727;
+  font-weight:700;
+}
+
+@media print{
+  .no-print{
+    display:none!important;
+  }
+}
 </style>
 </head>
+
 <body>
+
 <main class="records-page">
+
   <section class="records-head">
+
     <h1>Registros de inscripción</h1>
-    <p>Aquí se guardan todas las fichas rellenadas desde esta computadora y este navegador.</p>
+
+    <p>
+      Aquí aparecen todos los registros guardados en la base de datos.
+      Los registros son compartidos entre los usuarios autorizados.
+    </p>
+
     <div class="records-tools">
-      <button id="newBtn">➕ Nueva ficha</button>
-      <button id="allPdfBtn">📄 Crear PDF de todos</button>
-      <button id="selectedPdfBtn" class="secondary">📄 PDF seleccionados</button>
-      <button id="deleteAllBtn" class="danger">🗑 Borrar todos</button>
+
+      <button id="newBtn">
+        ➕ Nueva ficha
+      </button>
+
+      <button id="allPdfBtn">
+        📄 Crear PDF de todos
+      </button>
+
+      <button
+        id="selectedPdfBtn"
+        class="secondary"
+      >
+        📄 PDF seleccionados
+      </button>
+
+      <button
+        id="deleteAllBtn"
+        class="danger"
+      >
+        🗑 Borrar todos
+      </button>
+
     </div>
+
+    <div style="margin-top:12px;">
+      <input
+        id="search"
+        type="search"
+        placeholder="🔎 Buscar por nombre, apellido, ID, iglesia..."
+      >
+    </div>
+
     <div id="summary"></div>
+
   </section>
 
   <div id="recordList" class="record-list"></div>
+
 </main>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
-<script src="app.js"></script>
 
 <script>
-const KEY='vigilia2026_registros';
-const list=document.getElementById('recordList');
-const summary=document.getElementById('summary');
 
-function getRecords(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
-function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+const list =
+  document.getElementById('recordList');
+
+const summary =
+  document.getElementById('summary');
+
+const search =
+  document.getElementById('search');
+
+let allRecords = [];
+
+/* =========================================================
+   ESCAPAR HTML
+   ========================================================= */
+
+function esc(value){
+
+  return String(value ?? '')
+    .replace(
+      /[&<>'"]/g,
+      char => ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        "'":'&#39;',
+        '"':'&quot;'
+      }[char])
+    );
+
+}
+
+/* =========================================================
+   CARGAR REGISTROS
+   ========================================================= */
+
+async function getRecords(){
+
+  list.innerHTML =
+    '<div class="loading">⏳ Cargando registros...</div>';
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await window.supabaseClient
+        .from('registros_vigilia')
+        .select('*')
+        .order(
+          'fechaRegistroISO',
+          {
+            ascending:false
+          }
+        );
+
+    if(error){
+
+      console.error(error);
+
+      list.innerHTML =
+        '<div class="error-box">❌ No se pudieron cargar los registros.<br><br>' +
+        esc(error.message) +
+        '</div>';
+
+      summary.textContent = '';
+
+      return;
+
+    }
+
+    allRecords = data || [];
+
+    render();
+
+  }catch(error){
+
+    console.error(error);
+
+    list.innerHTML =
+      '<div class="error-box">❌ Error de conexión con Supabase.</div>';
+
+  }
+
+}
+
+/* =========================================================
+   RENDERIZAR
+   ========================================================= */
 
 function render(){
-  const records=getRecords();
-  summary.textContent=`${records.length} inscrito(s) registrado(s). Selecciona los que quieras incluir en el PDF.`;
-  if(!records.length){list.innerHTML='<div class="empty">Todavía no hay registros. Presiona “Nueva ficha” para comenzar.</div>';return;}
-  list.innerHTML=`
-    <div class="record-card">
-      <label class="top-check"><input id="selectAll" type="checkbox"> Seleccionar todos</label>
-    </div>`+
-    records.map(r=>`
-    <article class="record-card">
-      <div class="select-row">
-        <input class="record-check" type="checkbox" value="${esc(r.idRegistro)}">
-        <strong>${esc(r.nombres)} ${esc(r.apellidos)}</strong>
-      </div>
-      <div class="record-meta">ID: ${esc(r.idRegistro)} · Registrado: ${esc(r.fechaRegistro)}</div>
-      <div class="record-meta">Región ${esc(r.region)} · Distrito ${esc(r.distrito)} · Iglesia: ${esc(r.iglesia)}</div>
-      <div class="record-meta">Teléfono: ${esc(r.telefono)} · Talla: ${esc(r.talla)} · Cargo: ${esc(r.cargo)}</div>
-      <div class="record-actions">
-        <button onclick="openRecord('${esc(r.idRegistro)}')">Abrir ficha</button>
-        <button class="secondary" onclick="printOne('${esc(r.idRegistro)}')">PDF / Imprimir</button>
-        <button class="danger" onclick="deleteOne('${esc(r.idRegistro)}')">Eliminar</button>
-      </div>
-    </article>`).join('');
 
-  document.getElementById('selectAll').onchange=e=>{
-    document.querySelectorAll('.record-check').forEach(c=>c.checked=e.target.checked);
-  };
-}
-function openRecord(id){location.href='index.html?id='+encodeURIComponent(id)}
-function printOne(id){localStorage.setItem('vigilia2026_pdf_ids',JSON.stringify([id]));location.href='imprimir.html'}
-function selectedIds(){return [...document.querySelectorAll('.record-check:checked')].map(x=>x.value)}
-function printSelected(){
-  const ids=selectedIds();
-  if(!ids.length){alert('Selecciona al menos un registro.');return;}
-  localStorage.setItem('vigilia2026_pdf_ids',JSON.stringify(ids));
-  location.href='imprimir.html';
-}
-function printAll(){
-  const ids=getRecords().map(r=>r.idRegistro);
-  if(!ids.length){alert('No hay registros para crear el PDF.');return;}
-  localStorage.setItem('vigilia2026_pdf_ids',JSON.stringify(ids));
-  location.href='imprimir.html';
-}
-function deleteOne(id){
-  if(!confirm('¿Eliminar este registro? Esta acción no se puede deshacer.'))return;
-  localStorage.setItem(KEY,JSON.stringify(getRecords().filter(r=>r.idRegistro!==id)));
-  render();
-}
-document.getElementById('newBtn').onclick=()=>location.href='index.html';
-document.getElementById('allPdfBtn').onclick=printAll;
-document.getElementById('selectedPdfBtn').onclick=printSelected;
-document.getElementById('deleteAllBtn').onclick=()=>{
-  const r=getRecords();
-  if(!r.length)return;
-  if(confirm('¿Borrar TODOS los registros de este navegador? Esta acción no se puede deshacer.')){
-    localStorage.removeItem(KEY);render();
+  const term =
+    search.value
+      .trim()
+      .toLowerCase();
+
+  const records =
+    allRecords.filter(record => {
+
+      if(!term) return true;
+
+      const text = [
+
+        record.idRegistro,
+        record.nombres,
+        record.apellidos,
+        record.telefono,
+        record.correo,
+        record.region,
+        record.distrito,
+        record.iglesia,
+        record.pastor,
+        record.cargo
+
+      ]
+      .join(' ')
+      .toLowerCase();
+
+      return text.includes(term);
+
+    });
+
+  summary.textContent =
+    `${records.length} registro(s) mostrado(s) de ${allRecords.length} inscrito(s).`;
+
+  if(!records.length){
+
+    list.innerHTML =
+      '<div class="empty">' +
+      (
+        allRecords.length
+          ? 'No se encontraron registros con esa búsqueda.'
+          : 'Todavía no hay registros. Presiona “Nueva ficha” para comenzar.'
+      ) +
+      '</div>';
+
+    return;
+
   }
-};
-render();
+
+  list.innerHTML = `
+
+    <div class="record-card">
+
+      <label class="top-check">
+
+        <input
+          id="selectAll"
+          type="checkbox"
+        >
+
+        Seleccionar todos los mostrados
+
+      </label>
+
+    </div>
+
+    ${
+      records.map(record => `
+
+        <article
+          class="record-card"
+        >
+
+          <div class="select-row">
+
+            <input
+              class="record-check"
+              type="checkbox"
+              value="${esc(record.idRegistro)}"
+            >
+
+            <strong>
+              ${esc(record.nombres)}
+              ${esc(record.apellidos)}
+            </strong>
+
+          </div>
+
+          <div class="record-meta">
+            ID:
+            ${esc(record.idRegistro)}
+            · Registrado:
+            ${esc(record.fechaRegistro)}
+          </div>
+
+          <div class="record-meta">
+            Región
+            ${esc(record.region)}
+            · Distrito
+            ${esc(record.distrito)}
+            · Iglesia:
+            ${esc(record.iglesia)}
+          </div>
+
+          <div class="record-meta">
+            Teléfono:
+            ${esc(record.telefono)}
+            · Talla:
+            ${esc(record.talla)}
+            · Cargo:
+            ${esc(record.cargo)}
+          </div>
+
+          <div class="record-actions">
+
+            <button
+              onclick="openRecord('${esc(record.idRegistro)}')"
+            >
+              Abrir ficha
+            </button>
+
+            <button
+              class="secondary"
+              onclick="printOne('${esc(record.idRegistro)}')"
+            >
+              PDF / Imprimir
+            </button>
+
+            <button
+              class="danger"
+              onclick="deleteOne('${esc(record.idRegistro)}')"
+            >
+              Eliminar
+            </button>
+
+          </div>
+
+        </article>
+
+      `).join('')
+    }
+
+  `;
+
+  const selectAll =
+    document.getElementById('selectAll');
+
+  if(selectAll){
+
+    selectAll.onchange =
+      event => {
+
+        document
+          .querySelectorAll(
+            '.record-check'
+          )
+          .forEach(check => {
+
+            check.checked =
+              event.target.checked;
+
+          });
+
+      };
+
+  }
+
+}
+
+/* =========================================================
+   ABRIR FICHA
+   ========================================================= */
+
+function openRecord(id){
+
+  location.href =
+    'index.html?id=' +
+    encodeURIComponent(id);
+
+}
+
+/* =========================================================
+   PDF DE UN REGISTRO
+   ========================================================= */
+
+function printOne(id){
+
+  location.href =
+    'imprimir.html?ids=' +
+    encodeURIComponent(id);
+
+}
+
+/* =========================================================
+   OBTENER SELECCIONADOS
+   ========================================================= */
+
+function selectedIds(){
+
+  return [
+    ...document.querySelectorAll(
+      '.record-check:checked'
+    )
+  ].map(
+    element => element.value
+  );
+
+}
+
+/* =========================================================
+   PDF SELECCIONADOS
+   ========================================================= */
+
+function printSelected(){
+
+  const ids =
+    selectedIds();
+
+  if(!ids.length){
+
+    alert(
+      'Selecciona al menos un registro.'
+    );
+
+    return;
+
+  }
+
+  location.href =
+    'imprimir.html?ids=' +
+    ids
+      .map(id =>
+        encodeURIComponent(id)
+      )
+      .join(',');
+
+}
+
+/* =========================================================
+   PDF TODOS
+   ========================================================= */
+
+function printAll(){
+
+  if(!allRecords.length){
+
+    alert(
+      'No hay registros para crear el PDF.'
+    );
+
+    return;
+
+  }
+
+  location.href =
+    'imprimir.html?ids=' +
+    allRecords
+      .map(record =>
+        encodeURIComponent(
+          record.idRegistro
+        )
+      )
+      .join(',');
+
+}
+
+/* =========================================================
+   ELIMINAR UNO
+   ========================================================= */
+
+async function deleteOne(id){
+
+  if(
+    !confirm(
+      '¿Eliminar este registro? Esta acción no se puede deshacer.'
+    )
+  ){
+
+    return;
+
+  }
+
+  try{
+
+    const {
+      error
+    } =
+      await window.supabaseClient
+        .from('registros_vigilia')
+        .delete()
+        .eq(
+          'idRegistro',
+          id
+        );
+
+    if(error){
+
+      console.error(error);
+
+      alert(
+        'No se pudo eliminar el registro:\n\n' +
+        error.message
+      );
+
+      return;
+
+    }
+
+    allRecords =
+      allRecords.filter(
+        record =>
+          record.idRegistro !== id
+      );
+
+    render();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      'Ocurrió un error al eliminar.'
+    );
+
+  }
+
+}
+
+/* =========================================================
+   ELIMINAR TODOS
+   ========================================================= */
+
+async function deleteAll(){
+
+  if(!allRecords.length){
+
+    alert(
+      'No hay registros para eliminar.'
+    );
+
+    return;
+
+  }
+
+  const confirmation =
+    prompt(
+      '⚠️ ATENCIÓN\n\n' +
+      'Esto eliminará TODOS los registros de la base de datos.\n\n' +
+      'Esta acción afectará a TODOS los usuarios.\n\n' +
+      'Escribe BORRAR para confirmar:'
+    );
+
+  if(confirmation !== 'BORRAR'){
+
+    return;
+
+  }
+
+  try{
+
+    const {
+      error
+    } =
+      await window.supabaseClient
+        .from('registros_vigilia')
+        .delete()
+        .neq(
+          'idRegistro',
+          ''
+        );
+
+    if(error){
+
+      console.error(error);
+
+      alert(
+        'No se pudieron eliminar los registros:\n\n' +
+        error.message
+      );
+
+      return;
+
+    }
+
+    allRecords = [];
+
+    render();
+
+    alert(
+      'Todos los registros fueron eliminados.'
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      'Ocurrió un error al eliminar los registros.'
+    );
+
+  }
+
+}
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+document
+  .getElementById('newBtn')
+  .onclick = () => {
+
+    location.href =
+      'index.html';
+
+  };
+
+document
+  .getElementById('allPdfBtn')
+  .onclick = printAll;
+
+document
+  .getElementById('selectedPdfBtn')
+  .onclick = printSelected;
+
+document
+  .getElementById('deleteAllBtn')
+  .onclick = deleteAll;
+
+search.addEventListener(
+  'input',
+  render
+);
+
+/* =========================================================
+   INICIAR
+   ========================================================= */
+
+getRecords();
+
 </script>
+
 </body>
 </html>
