@@ -5,11 +5,14 @@ const statusEl = document.getElementById('recordStatus');
 let currentRecordId = null;
 
 /* =========================================================
-   VERIFICAR SUPABASE
+   SUPABASE
    ========================================================= */
 
 function supabaseReady() {
-  return typeof window.supabaseClient !== 'undefined';
+  return (
+    typeof window.supabaseClient !== 'undefined' &&
+    window.supabaseClient !== null
+  );
 }
 
 function setStatus(message, type = 'ok') {
@@ -85,8 +88,6 @@ function collectForm() {
 
     fechaRegistro: now.toLocaleString('es-NI'),
 
-    fechaRegistroISO: now.toISOString(),
-
     nombres: raw.nombres || '',
     apellidos: raw.apellidos || '',
     edad: raw.edad || '',
@@ -138,19 +139,19 @@ function fillForm(data) {
 
   fields.forEach(name => {
     if (form.elements[name]) {
-      form.elements[name].value =
-        data[name] ?? '';
+      form.elements[name].value = data[name] ?? '';
     }
   });
 
-  ['talla', 'cargo', 'condicionMedica'].forEach(name => {
+  [
+    'talla',
+    'cargo',
+    'condicionMedica'
+  ].forEach(name => {
     form
-      .querySelectorAll(
-        `input[name="${name}"]`
-      )
+      .querySelectorAll(`input[name="${name}"]`)
       .forEach(box => {
-        box.checked =
-          box.value === (data[name] || '');
+        box.checked = box.value === (data[name] || '');
       });
   });
 }
@@ -192,7 +193,6 @@ async function saveRecord() {
   }
 
   const data = collectForm();
-
   const wasEditing = Boolean(currentRecordId);
 
   setStatus(
@@ -204,20 +204,26 @@ async function saveRecord() {
     const { data: saved, error } =
       await window.supabaseClient
         .from('registros_vigilia')
-        .upsert(
-          data,
-          {
-            onConflict: 'idRegistro'
-          }
-        )
+        .upsert(data, {
+          onConflict: 'idRegistro'
+        })
         .select()
         .single();
 
     if (error) {
-      console.error(error);
+      console.error('SUPABASE ERROR:', error);
 
       setStatus(
         'Error al guardar: ' + error.message,
+        'error'
+      );
+
+      return;
+    }
+
+    if (!saved) {
+      setStatus(
+        'El registro fue procesado, pero Supabase no devolvió los datos.',
         'error'
       );
 
@@ -229,9 +235,7 @@ async function saveRecord() {
     history.replaceState(
       {},
       '',
-      `index.html?id=${encodeURIComponent(
-        saved.idRegistro
-      )}`
+      `index.html?id=${encodeURIComponent(saved.idRegistro)}`
     );
 
     setStatus(
@@ -250,7 +254,7 @@ async function saveRecord() {
     );
 
   } catch (error) {
-    console.error(error);
+    console.error('ERROR:', error);
 
     setStatus(
       'Ocurrió un error inesperado al guardar.',
@@ -266,11 +270,13 @@ async function saveRecord() {
 function newForm() {
   currentRecordId = null;
 
-  form.reset();
+  if (form) {
+    form.reset();
+  }
 
-  sheet.classList.remove(
-    'preview-mode'
-  );
+  if (sheet) {
+    sheet.classList.remove('preview-mode');
+  }
 
   setStatus(
     'Nueva ficha lista para llenar.',
@@ -312,7 +318,7 @@ async function loadRecord(id) {
         .single();
 
     if (error) {
-      console.error(error);
+      console.error('SUPABASE ERROR:', error);
 
       setStatus(
         'No se encontró ese registro.',
@@ -331,14 +337,13 @@ async function loadRecord(id) {
       return;
     }
 
-    currentRecordId =
-      data.idRegistro;
+    currentRecordId = data.idRegistro;
 
     fillForm(data);
 
-    sheet.classList.add(
-      'preview-mode'
-    );
+    if (sheet) {
+      sheet.classList.add('preview-mode');
+    }
 
     setStatus(
       `Registro ${id} cargado. Puedes editarlo o imprimirlo.`,
@@ -346,7 +351,7 @@ async function loadRecord(id) {
     );
 
   } catch (error) {
-    console.error(error);
+    console.error('ERROR:', error);
 
     setStatus(
       'Error al cargar el registro.',
@@ -364,9 +369,9 @@ const btnPreview =
 
 if (btnPreview) {
   btnPreview.onclick = () => {
-    sheet.classList.add(
-      'preview-mode'
-    );
+    if (sheet) {
+      sheet.classList.add('preview-mode');
+    }
 
     setStatus(
       'Vista previa activada.',
@@ -380,9 +385,9 @@ const btnEdit =
 
 if (btnEdit) {
   btnEdit.onclick = () => {
-    sheet.classList.remove(
-      'preview-mode'
-    );
+    if (sheet) {
+      sheet.classList.remove('preview-mode');
+    }
 
     setStatus(
       'Modo edición activado.',
@@ -439,12 +444,9 @@ if (form) {
   enforceSingleCheckboxGroups();
 
   const params =
-    new URLSearchParams(
-      location.search
-    );
+    new URLSearchParams(location.search);
 
-  const id =
-    params.get('id');
+  const id = params.get('id');
 
   if (id) {
     loadRecord(id);
